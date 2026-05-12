@@ -7,7 +7,7 @@
 #include <initializer_list>
 #include <cassert>
 
-namespace topit {
+namespace madieva {
   template< class T >
   struct Iter;
 
@@ -81,14 +81,14 @@ namespace topit {
 
 
 template< class T >
-topit::Vector< T >::Vector() :
+madieva::Vector< T >::Vector() :
   data_(nullptr),
   size_(0),
   capacity_(0)
 {}
 
 template< class T >
-topit::Vector< T >::Vector(const Vector< T >& rhs) :
+madieva::Vector< T >::Vector(const Vector< T >& rhs) :
   data_(nullptr),
   size_(rhs.getSize()),
   capacity_(rhs.getSize())
@@ -115,7 +115,7 @@ topit::Vector< T >::Vector(const Vector< T >& rhs) :
 }
 
 template< class T >
-topit::Vector< T >::Vector(Vector< T > && rhs) noexcept:
+madieva::Vector< T >::Vector(Vector< T > && rhs) noexcept:
   data_(rhs.data_),
   size_(rhs.size_),
   capacity_(rhs.capacity_)
@@ -126,7 +126,7 @@ topit::Vector< T >::Vector(Vector< T > && rhs) noexcept:
 }
 
 template< class T >
-topit::Vector< T >::Vector(size_t size, const T& init) :
+madieva::Vector< T >::Vector(size_t size, const T& init) :
   Vector(size)
 {
   size_t i = 0;
@@ -145,7 +145,7 @@ topit::Vector< T >::Vector(size_t size, const T& init) :
 }
 
 template< class T >
-topit::Vector< T >::~Vector()
+madieva::Vector< T >::~Vector()
 {
   for (size_t i = 0; i < size_; ++i) {
     data_[i].~T();
@@ -157,7 +157,7 @@ topit::Vector< T >::~Vector()
 }
 
 template< class T >
-topit::Vector< T >& topit::Vector< T >::operator=(const Vector< T > & rhs)
+madieva::Vector< T >& madieva::Vector< T >::operator=(const Vector< T > & rhs)
 {
   Vector< T > cpy = rhs;
   swap(cpy);
@@ -165,7 +165,7 @@ topit::Vector< T >& topit::Vector< T >::operator=(const Vector< T > & rhs)
 }
 
 template< class T >
-topit::Vector< T >& topit::Vector< T >::operator=(Vector< T > && rhs)
+madieva::Vector< T >& madieva::Vector< T >::operator=(Vector< T > && rhs)
 {
   if (this == std::addressof(rhs)) {
     return * this;
@@ -176,25 +176,25 @@ topit::Vector< T >& topit::Vector< T >::operator=(Vector< T > && rhs)
 }
 
 template< class T >
-bool topit::Vector< T >::isEmpty() const noexcept
+bool madieva::Vector< T >::isEmpty() const noexcept
 {
   return !size_;
 }
 
 template< class T >
-size_t topit::Vector< T >::getSize() const noexcept
+size_t madieva::Vector< T >::getSize() const noexcept
 {
   return size_;
 }
 
 template< class T >
-size_t topit::Vector< T >::getCapacity() const noexcept
+size_t madieva::Vector< T >::getCapacity() const noexcept
 {
   return capacity_;
 }
 
 template< class T >
-void topit::Vector< T >::pushBack(const T & v)
+void madieva::Vector< T >::pushBack(const T & v)
 {
   if (size_ < capacity_) {
     new (& data_[size_]) T(v);
@@ -229,7 +229,7 @@ void topit::Vector< T >::pushBack(const T & v)
 }
 
 template< class T >
-void topit::Vector< T >::popBack()
+void madieva::Vector< T >::popBack()
 {
   if (size_) {
     size_--;
@@ -238,27 +238,27 @@ void topit::Vector< T >::popBack()
 }
 
 template< class T >
-T & topit::Vector< T >::operator[](size_t id) noexcept
+T & madieva::Vector< T >::operator[](size_t id) noexcept
 {
   const Vector< T > * cthis = this;
   return const_cast< T& >((*cthis)[id]);
 }
 
 template< class T >
-const T & topit::Vector< T >::operator[](size_t id) const noexcept
+const T & madieva::Vector< T >::operator[](size_t id) const noexcept
 {
   return data_[id];
 }
 
 template< class T >
-T & topit::Vector< T >::at(size_t id)
+T & madieva::Vector< T >::at(size_t id)
 {
   const Vector< T >* cthis = this;
   return const_cast< T & >(cthis -> at(id));
 }
 
 template< class T >
-const T & topit::Vector< T >::at(size_t id) const
+const T & madieva::Vector< T >::at(size_t id) const
 {
   if( id < getSize())
   {
@@ -268,7 +268,7 @@ const T & topit::Vector< T >::at(size_t id) const
 }
 
 template< class T >
-void topit::Vector< T >::swap( Vector< T > & rhs) noexcept
+void madieva::Vector< T >::swap( Vector< T > & rhs) noexcept
 {
   std::swap(data_, rhs.data_);
   std::swap(size_, rhs.size_);
@@ -276,7 +276,7 @@ void topit::Vector< T >::swap( Vector< T > & rhs) noexcept
 }
 
 template< class T >
-void topit::Vector< T >::insert(size_t i, const T& v)
+void madieva::Vector< T >::insert(size_t i, const T& v)
 {
   if (i > size_) {
     throw std::out_of_range("insert index out of range");
@@ -324,7 +324,7 @@ void topit::Vector< T >::insert(size_t i, const T& v)
 }
 
 template< class T >
-topit::Iter< T > topit::Vector< T >::insert(Iter< T > i, const T & v)
+madieva::Iter< T > madieva::Vector< T >::insert(Iter< T > i, const T & v)
 {
   size_t index = i - begin();
   insert(index, v);
@@ -332,7 +332,7 @@ topit::Iter< T > topit::Vector< T >::insert(Iter< T > i, const T & v)
 }
 
 template< class T >
-void topit::Vector< T >::insert(size_t i, const Vector< T >& rhs, size_t start, size_t end)
+void madieva::Vector< T >::insert(size_t i, const Vector< T >& rhs, size_t start, size_t end)
 {
   size_t delta = (end - start);
   if (delta == 0) {
@@ -391,7 +391,7 @@ void topit::Vector< T >::insert(size_t i, const Vector< T >& rhs, size_t start, 
 }
 
 template< class T >
-topit::Iter< T > topit::Vector< T >::insert(Iter< T > i, const Vector< T > & rhs, Iter< T > start, Iter< T > end)
+madieva::Iter< T > madieva::Vector< T >::insert(Iter< T > i, const Vector< T > & rhs, Iter< T > start, Iter< T > end)
 {
   size_t index = i - begin();
   size_t s = start - rhs.begin();
@@ -401,7 +401,7 @@ topit::Iter< T > topit::Vector< T >::insert(Iter< T > i, const Vector< T > & rhs
 }
 
 template< class T >
-void topit::Vector< T >::erase(size_t i)
+void madieva::Vector< T >::erase(size_t i)
 {
   if (i >= size_) {
     throw std::out_of_range("erase index out of range");
@@ -436,7 +436,7 @@ void topit::Vector< T >::erase(size_t i)
 }
 
 template< class T >
-void topit::Vector< T >::erase(size_t start, size_t end)
+void madieva::Vector< T >::erase(size_t start, size_t end)
 {
   if (end < start) {
     throw std::invalid_argument("start > end");
@@ -476,7 +476,7 @@ void topit::Vector< T >::erase(size_t start, size_t end)
 }
 
 template< class T >
-topit::Vector< T >::Vector(std::initializer_list< T > il) :
+madieva::Vector< T >::Vector(std::initializer_list< T > il) :
   Vector(il.size())
 {
   size_t count = 0;
@@ -485,6 +485,7 @@ topit::Vector< T >::Vector(std::initializer_list< T > il) :
       new (&data_[count]) T(*it);
       count++;
     }
+    size_ = il.size();
   } catch (...) {
     for (size_t i = 0; i < count; ++i) {
       data_[i].~T();
@@ -498,7 +499,7 @@ topit::Vector< T >::Vector(std::initializer_list< T > il) :
 }
 
 template< class T>
-void topit::Vector< T >::unsafePushback(const T & v)
+void madieva::Vector< T >::unsafePushback(const T & v)
 {
   assert(size_ < capacity_);
   new (&data_[size_]) T(v);
@@ -506,7 +507,7 @@ void topit::Vector< T >::unsafePushback(const T & v)
 }
 
 template< class T>
-void topit::Vector< T >::reserve(size_t required)
+void madieva::Vector< T >::reserve(size_t required)
 {
   if (required <= capacity_) {
     return;
@@ -534,7 +535,7 @@ void topit::Vector< T >::reserve(size_t required)
 }
 
 template< class T>
-void topit::Vector< T >::shrinkToFit()
+void madieva::Vector< T >::shrinkToFit()
 {
   if (size_ == capacity_) {
     return;
@@ -569,7 +570,7 @@ void topit::Vector< T >::shrinkToFit()
 
 template< class T >
 template< class IT >
-void topit::Vector< T >::pushbackRange(IT b, size_t c)
+void madieva::Vector< T >::pushbackRange(IT b, size_t c)
 {
   if (c == 0) {
     return;
@@ -603,31 +604,31 @@ void topit::Vector< T >::pushbackRange(IT b, size_t c)
 }
 
 template< class T >
-topit::Iter< T > topit::Vector< T >::begin() noexcept
+madieva::Iter< T > madieva::Vector< T >::begin() noexcept
 {
   return Iter< T >(data_);
 }
 
 template< class T >
-topit::Iter< T > topit::Vector< T >::end() noexcept
+madieva::Iter< T > madieva::Vector< T >::end() noexcept
 {
   return Iter< T >(data_ + size_);
 }
 
 template< class T >
-topit::Iter< const T > topit::Vector< T >::begin() const noexcept
+madieva::Iter< const T > madieva::Vector< T >::begin() const noexcept
 {
   return Iter< const T>(data_);
 }
 
 template< class T >
-topit::Iter< const T > topit::Vector< T >::end() const noexcept
+madieva::Iter< const T > madieva::Vector< T >::end() const noexcept
 {
   return Iter<const T>(data_ + size_);
 }
 
 template< class T >
-void topit::Vector< T >::pushBackCount(size_t k, const T& val)
+void madieva::Vector< T >::pushBackCount(size_t k, const T& val)
 {
   if (k == 0) {
     return;
@@ -661,7 +662,7 @@ void topit::Vector< T >::pushBackCount(size_t k, const T& val)
 }
 
 template< class T >
-topit::Vector< T >::Vector(size_t size) :
+madieva::Vector< T >::Vector(size_t size) :
   data_(nullptr),
   size_(0),
   capacity_(0)
@@ -670,12 +671,12 @@ topit::Vector< T >::Vector(size_t size) :
     return;
   }
   data_ = static_cast< T* >(::operator new(sizeof(T) * size));
-  size_ = size;
+  size_ = 0;
   capacity_ = size;
 }
 
 template< class T >
-bool topit::operator==(const Vector< T > & lhs, const Vector< T > & rhs)
+bool madieva::operator==(const Vector< T > & lhs, const Vector< T > & rhs)
 {
   bool isEqual = lhs.getSize() == rhs.getSize();
   for (size_t i = 0; (i < lhs.getSize()) && (isEqual = isEqual && lhs[i] == rhs[i]); ++i);
@@ -683,38 +684,38 @@ bool topit::operator==(const Vector< T > & lhs, const Vector< T > & rhs)
 }
 
 template< class T >
-topit::Iter< T >::Iter(T * a) :
+madieva::Iter< T >::Iter(T * a) :
  it(a)
 {}
 
 template< class T >
-topit::Iter< T > & topit::Iter< T >::operator++() noexcept
+madieva::Iter< T > & madieva::Iter< T >::operator++() noexcept
 {
   ++it;
   return *this; 
 }
 
 template< class T >
-topit::Iter< T > & topit::Iter< T >::operator--() noexcept
+madieva::Iter< T > & madieva::Iter< T >::operator--() noexcept
 {
   --it;
   return *this; 
 }
 
 template< class T >
-bool topit::Iter< T >::operator==(const Iter& other) const noexcept
+bool madieva::Iter< T >::operator==(const Iter& other) const noexcept
 { 
   return it == other.it; 
 }
 
 template< class T >
-bool topit::Iter< T >::operator!=(const Iter& other) const noexcept
+bool madieva::Iter< T >::operator!=(const Iter& other) const noexcept
 {
   return it != other.it; 
 }
 
 template< class T >
-T& topit::Iter< T >::operator*() noexcept
+T& madieva::Iter< T >::operator*() noexcept
 {
   return *it;
 }
