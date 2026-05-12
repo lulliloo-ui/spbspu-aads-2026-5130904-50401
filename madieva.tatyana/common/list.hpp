@@ -58,6 +58,7 @@ namespace madieva {
     void push_back(const T & a);
     void pop_front() noexcept;
     void pop_back() noexcept;
+    void erase(LIter< T > pos) noexcept;
     LIter< T > begin() noexcept;
     LCIter< T > begin() const noexcept;
     size_t size() const noexcept;
@@ -281,6 +282,28 @@ namespace madieva {
         size_--;
       }
     }
+  }
+
+  template< class T >
+  void List< T >::erase(LIter< T > pos) noexcept
+  {
+    Node< T > * node = pos.it;
+    if (!node) {
+      return;
+    }
+    if (size_ == 1) {
+      delete head;
+      head = nullptr;
+      size_ == 0;
+      return;
+    }
+    if (node == head) {
+      head = head->next;
+    }
+    node->prev->next = node->next;
+    node->next->prev = node->prev;
+    delete node;
+    --size_;
   }
 
   template< class T >
