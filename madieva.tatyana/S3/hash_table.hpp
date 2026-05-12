@@ -79,11 +79,35 @@ namespace madieva {
     LIter< Pair > it = bucket.begin();
     for (size_t i = 0; i < bucket.size(); ++i) {
       if (comparer_((*it).first, k)) {
-        return (*it).secound;
+        return (*it).second;
       }
       ++it;
     }
     throw std::out_of_range("no such key\n");
+  }
+
+  template< class Key, class Value, class Hash, class Equal >
+  Value HashTable< Key, Value, Hash, Equal >::drop(Key k)
+  {
+    size_t index = getIndex(k);
+    List< Pair > & bucket = buckets_[index];
+    LIter< Pair > it = bucket.begin();
+    for (size_t i = 0; i < bucket.size(); ++i) {
+      if (comparer_((*it).first, k)) {
+        Value temp = (*it).second;
+        bucket.erase(it);
+        count_--;
+        return temp;
+      }
+      ++it;
+    }
+    throw std::out_of_range("no element\n");
+  }
+
+  template< class Key, class Value, class Hash, class Equal >
+  void rehash(size_t slots)
+  {
+    
   }
 
   template< class Key, class Value, class Hash, class Equal >
