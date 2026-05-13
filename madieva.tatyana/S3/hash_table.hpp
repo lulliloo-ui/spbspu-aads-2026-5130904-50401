@@ -3,17 +3,29 @@
 #include "../common/vector.hpp"
 #include "../common/list.hpp"
 #include <stdexcept>
+
 namespace madieva {
+
+  template<class Key, class Value, class Hash, class Equal>
+  class HTIter;
+
+  template<class Key, class Value, class Hash, class Equal>
+  class HTCIter;
 
   template< class Key, class Value, class Hash, class Equal >
   class HashTable {
+    friend class HTIter<Key, Value, Hash, Equal>;
+    friend class HTCIter<Key, Value, Hash, Equal>;
     using Pair = std::pair<Key, Value>;
+    using hit = HTIter<Key, Value, Hash, Equal>;
     Vector< List< Pair > > buckets_;
     Hash hasher_;
     Equal comparer_;
     size_t count_;
     size_t getIndex(const Key& k) const;
   public:
+    hit begin();
+    hit end();
     explicit HashTable(size_t count = 16);
     void add(Key k, Value v);
     bool has(Key k);
@@ -32,6 +44,23 @@ namespace madieva {
       return 0;
     }
     return hasher_(k) % size;
+  }
+
+  template< class Key, class Value, class Hash, class Equal >
+  HTIter<Key, Value, Hash, Equal> HashTable< Key, Value, Hash, Equal >::begin()
+  {
+    for (size_t i = 0; i < buckets_.getSize(); ++i) {
+      if (buckets_[i].size() > 0) {
+        return hit(i, buckets_[i].begin(), &buckets_);
+      }
+    }
+    return end();
+  }
+
+  template< class Key, class Value, class Hash, class Equal >
+  HTIter<Key, Value, Hash, Equal> HashTable< Key, Value, Hash, Equal >::end()
+  {
+    return hit(buckets_.getSize(), LIter< Pair >(nullptr), & buckets_);
   }
 
   template< class Key, class Value, class Hash, class Equal >
@@ -147,5 +176,7 @@ namespace madieva {
     return count_ == 0;
   }
 }
+
+#include "hash_table_iter.hpp"
 
 #endif

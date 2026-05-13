@@ -4,6 +4,7 @@
 
 #include "../common/list.hpp"
 #include "hash_table.hpp"
+
 namespace madieva {
   template< class Key, class Value, class Hash, class Equal >
   class HashTable;
