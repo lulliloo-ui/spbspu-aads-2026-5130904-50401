@@ -21,17 +21,22 @@ namespace madieva {
     Value drop(Key k);
     void rehash(size_t slots);
     size_t size() const noexcept;
+    size_t capacity() const noexcept;
     bool empty() const noexcept;
   };
 
   template< class Key, class Value, class Hash, class Equal >
-  size_t HashTable< Key, Value, Hash, Equal >::getIndex(const Key& k) const {
-    return hasher_(k) % buckets_.getSize();
+  size_t HashTable< Key, Value, Hash, Equal >::getIndex(const Key & k) const {
+    size_t size = buckets_.getSize();
+    if (size == 0) {
+      return 0;
+    }
+    return hasher_(k) % size;
   }
 
   template< class Key, class Value, class Hash, class Equal >
   HashTable< Key, Value, Hash, Equal >::HashTable(size_t count) :
-    buckets_()
+    buckets_(), count_(0)
   {
     buckets_.reserve(count);
     for(size_t i = 0; i < count; ++i) {
@@ -105,15 +110,35 @@ namespace madieva {
   }
 
   template< class Key, class Value, class Hash, class Equal >
-  void rehash(size_t slots)
+  void HashTable< Key, Value, Hash, Equal >::rehash(size_t new_slots)
   {
-    
+    Vector< List< Pair > > new_buckets;
+    new_buckets.reserve(new_slots);
+    for(size_t i = 0; i < new_slots; ++i) {
+      new_buckets.pushBack(List< Pair >());
+    }
+    for (size_t i = 0; i < buckets_.getSize(); ++i) {
+      List<Pair>& bucket = buckets_[i];
+      LIter<Pair> it = bucket.begin();
+      for (size_t j = 0; j < bucket.size(); ++j) {
+        size_t index = hasher_((*it).first) % new_slots;
+        new_buckets[index].push_back(std::make_pair((*it).first, (*it).second));
+        ++it;
+      }
+    }
+    buckets_ = std::move(new_buckets);
   }
 
   template< class Key, class Value, class Hash, class Equal >
   size_t HashTable< Key, Value, Hash, Equal >::size() const noexcept
   {
     return count_;
+  }
+
+  template< class Key, class Value, class Hash, class Equal >
+  size_t HashTable< Key, Value, Hash, Equal >::capacity() const noexcept
+  {
+    return buckets_.getCapacity();
   }
 
   template< class Key, class Value, class Hash, class Equal >
