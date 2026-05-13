@@ -294,7 +294,7 @@ namespace madieva {
     if (size_ == 1) {
       delete head;
       head = nullptr;
-      size_ == 0;
+      size_ = 0;
       return;
     }
     if (node == head) {
