@@ -17,15 +17,18 @@ namespace madieva {
     friend class HTIter<Key, Value, Hash, Equal>;
     friend class HTCIter<Key, Value, Hash, Equal>;
     using Pair = std::pair<Key, Value>;
-    using hit = HTIter<Key, Value, Hash, Equal>;
+    using h_it = HTIter<Key, Value, Hash, Equal>;
+    using hc_it = HTCIter<Key, Value, Hash, Equal>;
     Vector< List< Pair > > buckets_;
     Hash hasher_;
     Equal comparer_;
     size_t count_;
     size_t getIndex(const Key& k) const;
   public:
-    hit begin();
-    hit end();
+    h_it begin();
+    h_it end();
+    hc_it begin() const;
+    hc_it end() const;
     explicit HashTable(size_t count = 16);
     void add(Key k, Value v);
     bool has(Key k);
@@ -51,7 +54,7 @@ namespace madieva {
   {
     for (size_t i = 0; i < buckets_.getSize(); ++i) {
       if (buckets_[i].size() > 0) {
-        return hit(i, buckets_[i].begin(), &buckets_);
+        return h_it(i, buckets_[i].begin(), &buckets_);
       }
     }
     return end();
@@ -60,7 +63,24 @@ namespace madieva {
   template< class Key, class Value, class Hash, class Equal >
   HTIter<Key, Value, Hash, Equal> HashTable< Key, Value, Hash, Equal >::end()
   {
-    return hit(buckets_.getSize(), LIter< Pair >(nullptr), & buckets_);
+    return h_it(buckets_.getSize(), LIter< Pair >(nullptr), & buckets_);
+  }
+
+  template<class Key, class Value, class Hash, class Equal>
+  HTCIter<Key, Value, Hash, Equal> HashTable<Key, Value, Hash, Equal>::begin() const
+  {
+    for (size_t i = 0; i < buckets_.getSize(); ++i) {
+      if (buckets_[i].size() > 0) {
+        return const_iterator(i, buckets_[i].begin(), &buckets_);
+      }
+    }
+    return end();
+  }
+
+  template<class Key, class Value, class Hash, class Equal>
+  HTCIter<Key, Value, Hash, Equal> HashTable<Key, Value, Hash, Equal>::end() const
+  {
+    return const_iterator(buckets_.getSize(), LCIter<Pair>(nullptr), &buckets_);
   }
 
   template< class Key, class Value, class Hash, class Equal >

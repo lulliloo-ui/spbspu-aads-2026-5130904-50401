@@ -43,7 +43,6 @@ namespace madieva {
     }
   }
 
-
   template< class Key, class Value, class Hash, class Equal >
   HTIter< Key, Value, Hash, Equal >::HTIter(size_t idx, LIter< Pair > it,
     const Vector< List< Pair > > * buckets) :
@@ -69,7 +68,7 @@ namespace madieva {
   template< class Key, class Value, class Hash, class Equal >
   bool HTIter< Key, Value, Hash, Equal >::operator==(const HTIter& other) const
   {
-    return bucket_index_ == other.bucket_index_ && 
+    return bucket_index_ == other.bucket_index_ &&
       node_iter_ == other.node_iter_ &&
       buckets_ == other.buckets_;
   }
