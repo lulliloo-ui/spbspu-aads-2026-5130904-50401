@@ -57,12 +57,12 @@ namespace madieva {
     next();
     return *this;
   }
-  
+
   template<class Key, class Value, class Hash, class Equal>
   std::pair<const Key&, const Value&> HTCIter<Key, Value, Hash, Equal>::operator*() const
   {
-    Pair & pair = *node_iter_;
-    return {pair->first, pair->second};
+    const Pair & pair = *node_iter_;
+    return {pair.first, pair.second};
   }
 
   template<class Key, class Value, class Hash, class Equal>

@@ -71,7 +71,7 @@ namespace madieva {
   {
     for (size_t i = 0; i < buckets_.getSize(); ++i) {
       if (buckets_[i].size() > 0) {
-        return const_iterator(i, buckets_[i].begin(), &buckets_);
+        return hc_it(i, buckets_[i].begin(), &buckets_);
       }
     }
     return end();
@@ -80,7 +80,7 @@ namespace madieva {
   template<class Key, class Value, class Hash, class Equal>
   HTCIter<Key, Value, Hash, Equal> HashTable<Key, Value, Hash, Equal>::end() const
   {
-    return const_iterator(buckets_.getSize(), LCIter<Pair>(nullptr), &buckets_);
+    return hc_it(buckets_.getSize(), LCIter<Pair>(nullptr), &buckets_);
   }
 
   template< class Key, class Value, class Hash, class Equal >
@@ -198,5 +198,6 @@ namespace madieva {
 }
 
 #include "hash_table_iter.hpp"
+#include "hash_table_citer.hpp"
 
 #endif
