@@ -22,7 +22,10 @@ namespace madieva {
     bool hasGraph(const std::string & name) const;
     Graph & getGraph(const std::string & name);
     const Graph & getGraph(const std::string & name) const;
+    List<std::string> getAllNames() const;
     void removeGraph(const std::string & name);
+    size_t size() const;
+    bool empty() const;
   };
 
   size_t StringHash::operator()(const std::string & a) const
@@ -58,8 +61,27 @@ namespace madieva {
     return graphs_.get(name);
   }
 
+  List<std::string> GraphStorage::getAllNames() const {
+    List<std::string> names;
+    HTCIter< std::string, Graph, StringHash, StringEqual > it = graphs_.begin();
+    for (size_t i = 0; i < graphs_.size(); ++i) {
+      names.push_back((*it).first);
+      ++it;
+    }
+    return names;
+  }
+
   void GraphStorage::removeGraph(const std::string& name) {
     graphs_.drop(name);
+  }
+
+  size_t GraphStorage::size() const
+  {
+    return graphs_.size();
+  }
+  bool GraphStorage::empty() const
+  {
+    return graphs_.empty();
   }
 
 }
