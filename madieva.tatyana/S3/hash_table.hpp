@@ -31,8 +31,9 @@ namespace madieva {
     hc_it end() const;
     explicit HashTable(size_t count = 16);
     void add(Key k, Value v);
-    bool has(Key k);
+    bool has(Key k) const;
     Value & get(Key k);
+    const Value & get(Key k) const;
     Value drop(Key k);
     void rehash(size_t slots);
     size_t size() const noexcept;
@@ -111,7 +112,7 @@ namespace madieva {
   }
 
   template< class Key, class Value, class Hash, class Equal >
-  bool HashTable< Key, Value, Hash, Equal >::has(Key k)
+  bool HashTable< Key, Value, Hash, Equal >::has(Key k) const
   {
     size_t index = getIndex(k);
     List< Pair > & bucket = buckets_[index];
@@ -139,6 +140,22 @@ namespace madieva {
     }
     throw std::out_of_range("no such key\n");
   }
+
+  template< class Key, class Value, class Hash, class Equal >
+  const Value & HashTable< Key, Value, Hash, Equal >::get(Key k) const
+  {
+    size_t index = getIndex(k);
+    const List< Pair > & bucket = buckets_[index];
+    LCIter< Pair > it = bucket.begin();
+    for (size_t i = 0; i < bucket.size(); ++i) {
+      if (comparer_((*it).first, k)) {
+        return (*it).second;
+      }
+      ++it;
+    }
+    throw std::out_of_range("no such key\n");
+  }
+
 
   template< class Key, class Value, class Hash, class Equal >
   Value HashTable< Key, Value, Hash, Equal >::drop(Key k)
