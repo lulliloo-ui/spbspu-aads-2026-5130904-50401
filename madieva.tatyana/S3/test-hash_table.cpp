@@ -50,7 +50,7 @@ BOOST_AUTO_TEST_CASE(drop_key)
   madieva::HashTable< int, std::string, std::hash< int >, std::equal_to< int > > ht;
   ht.add(1, "one");
   ht.add(2, "two");
-  
+
   std::string val = ht.drop(1);
   BOOST_CHECK(val == "one");
   BOOST_CHECK(!ht.has(1));

@@ -692,26 +692,26 @@ template< class T >
 madieva::Iter< T > & madieva::Iter< T >::operator++() noexcept
 {
   ++it;
-  return *this; 
+  return *this;
 }
 
 template< class T >
 madieva::Iter< T > & madieva::Iter< T >::operator--() noexcept
 {
   --it;
-  return *this; 
+  return *this;
 }
 
 template< class T >
 bool madieva::Iter< T >::operator==(const Iter& other) const noexcept
-{ 
-  return it == other.it; 
+{
+  return it == other.it;
 }
 
 template< class T >
 bool madieva::Iter< T >::operator!=(const Iter& other) const noexcept
 {
-  return it != other.it; 
+  return it != other.it;
 }
 
 template< class T >
