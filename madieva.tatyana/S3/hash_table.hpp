@@ -115,8 +115,8 @@ namespace madieva {
   bool HashTable< Key, Value, Hash, Equal >::has(Key k) const
   {
     size_t index = getIndex(k);
-    List< Pair > & bucket = buckets_[index];
-    LIter< Pair > it = bucket.begin();
+    const List< Pair > & bucket = buckets_[index];
+    LCIter< Pair > it = bucket.begin();
     for (size_t i = 0; i < bucket.size(); ++i) {
       if (comparer_((*it).first, k)) {
         return true;

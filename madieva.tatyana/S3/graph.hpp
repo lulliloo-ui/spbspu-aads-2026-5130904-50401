@@ -1,5 +1,7 @@
 #ifndef GRAPH_HPP
 #define GRAPH_HPP
+#define XXH_INLINE_ALL
+
 #include <string>
 #include "hash_table.hpp"
 #include "../common/xxhash.h"

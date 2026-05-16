@@ -1,5 +1,6 @@
 #ifndef GRAPH_STORAGE_HPP
 #define GRAPH_STORAGE_HPP
+#define XXH_INLINE_ALL
 
 #include <string>
 #include <stdexcept>
