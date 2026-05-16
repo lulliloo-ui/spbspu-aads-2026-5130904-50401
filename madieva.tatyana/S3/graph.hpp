@@ -95,8 +95,6 @@ namespace madieva {
   {
     key k = {a, b};
     addEdge(k, weight);
-    addVertex(a);
-    addVertex(b);
   }
 
   void Graph::addEdge(const key & a, size_t weight)
@@ -108,6 +106,8 @@ namespace madieva {
       list.push_back(weight);
       edge_.add(a, list);
     }
+    addVertex(a.first);
+    addVertex(a.second);
   }
 
 

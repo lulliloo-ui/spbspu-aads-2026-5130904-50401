@@ -27,6 +27,10 @@ int main(int argc, char * argv[])
   commands.add("graphs", madieva::cmd_graphs);
   commands.add("vertexes", madieva::cmd_vertexes);
   commands.add("outbound", madieva::cmd_outbound);
+  commands.add("inbound", madieva::cmd_inbound);
+  commands.add("bind", madieva::cmd_bind);
+  commands.add("cut", madieva::cmd_cut);
+
   std::string cmd;
   while (std::cin >> cmd) {
     if (commands.has(cmd)) {
