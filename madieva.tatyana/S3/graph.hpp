@@ -89,8 +89,6 @@ namespace madieva {
     return edge_;
   }
 
-
-
   void Graph::addEdge(const std::string & a, const std::string & b, size_t weight)
   {
     key k = {a, b};
