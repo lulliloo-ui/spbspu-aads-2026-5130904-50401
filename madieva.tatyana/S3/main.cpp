@@ -64,7 +64,6 @@ int main(int argc, char * argv[])
   std::string line;
   while (std::getline(std::cin, line)) {
     std::istringstream iss(line);
-    
     std::string cmd;
     iss >> cmd;
     if (commands.has(cmd)) {
