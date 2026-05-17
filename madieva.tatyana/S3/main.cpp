@@ -30,6 +30,9 @@ int main(int argc, char * argv[])
   commands.add("inbound", madieva::cmd_inbound);
   commands.add("bind", madieva::cmd_bind);
   commands.add("cut", madieva::cmd_cut);
+  commands.add("create", madieva::cmd_create);
+  commands.add("merge", madieva::cmd_merge);
+  commands.add("extract", madieva::cmd_extract);
 
   std::string cmd;
   while (std::cin >> cmd) {
