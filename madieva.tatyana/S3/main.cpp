@@ -67,7 +67,7 @@ int main(int argc, char * argv[])
     std::string cmd;
     iss >> cmd;
     if (commands.has(cmd)) {
-      commands.get(cmd)(std::cin, std::cout, storage);
+      commands.get(cmd)(iss, std::cout, storage);
     } else {
       std::cout << "<INVALID COMMAND>\n";
     }
