@@ -10,6 +10,7 @@
 
 namespace madieva {
   class GraphStorage {
+    List<std::string> order_;
     HashTable< std::string, Graph, XXHash64, StringEqual > graphs_;
   public:
     GraphStorage() = default;
@@ -29,6 +30,7 @@ namespace madieva {
       throw std::runtime_error("Graph already exists");
     } else {
       graphs_.add(name, graph);
+      order_.push_back(name);
     }
   }
 
@@ -46,17 +48,19 @@ namespace madieva {
   }
 
   List<std::string> GraphStorage::getAllNames() const {
-    List<std::string> names;
-    HTCIter< std::string, Graph, XXHash64, StringEqual > it = graphs_.begin();
-    for (size_t i = 0; i < graphs_.size(); ++i) {
-      names.push_back((*it).first);
-      ++it;
-    }
-    return names;
+    return order_;
   }
 
   void GraphStorage::removeGraph(const std::string& name) {
     graphs_.drop(name);
+    LIter< std::string > it = order_.begin();
+    for (size_t i = 0; i < order_.size(); ++i) {
+      if (*it == name) {
+        order_.erase(it);
+        break;
+      }
+      ++it;
+    }
   }
 
   size_t GraphStorage::size() const
