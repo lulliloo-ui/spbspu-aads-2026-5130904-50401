@@ -125,6 +125,7 @@ namespace madieva {
       out << "<INVALID COMMAND>\n";
       return;
     }
+    bool exists = false;
     List< std::string > list_v = graph.getVertices();
     LIter< std::string > it = list_v.begin();
     for (size_t i = 0; i < list_v.size(); ++i) {
@@ -140,8 +141,12 @@ namespace madieva {
           ++e_it;
         }
         out << "\n";
+        exists = true;
       }
       ++it;
+    }
+    if (!exists) {
+      out << "\n";
     }
   }
 

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <limits>
 #include "hash_table.hpp"
@@ -60,13 +61,16 @@ int main(int argc, char * argv[])
   commands.add("merge", madieva::cmd_merge);
   commands.add("extract", madieva::cmd_extract);
 
-  std::string cmd;
-  while (std::cin >> cmd) {
+  std::string line;
+  while (std::getline(std::cin, line)) {
+    std::istringstream iss(line);
+    
+    std::string cmd;
+    iss >> cmd;
     if (commands.has(cmd)) {
       commands.get(cmd)(std::cin, std::cout, storage);
     } else {
       std::cout << "<INVALID COMMAND>\n";
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
   }
   return 0;
