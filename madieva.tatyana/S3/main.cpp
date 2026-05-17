@@ -1,24 +1,49 @@
 #include <iostream>
+#include <fstream>
 #include <limits>
 #include "hash_table.hpp"
 #include "graph_storage.hpp"
 #include "commands.hpp"
 
-
+namespace madieva {
+  bool readGraphs(std::istream & file, GraphStorage& storage)
+  {
+    std::string graph_name;
+    while (file >> graph_name) {
+      size_t edges_count;
+      if (!(file >> edges_count)) {
+        return false;
+      }
+      Graph graph(graph_name);
+      for (size_t i = 0; i < edges_count; ++i) {
+        std::string a, b;
+        size_t weight;
+        if (!(file >> a >> b >> weight)) {
+          return false;
+        }
+        graph.addEdge(a, b, weight);
+      }
+      try {
+        storage.addGraph(graph_name, graph);
+      } catch (...) {
+        return false;
+      }
+    }
+  }
+}
 
 int main(int argc, char * argv[])
 {
+  if (argc != 2) {
+    return 1;
+  }
   madieva::GraphStorage storage;
 
-  madieva::Graph g1("gr1");
-  g1.addVertex("a");
-  g1.addVertex("b");
-  g1.addVertex("c");
-  g1.addEdge("a", "b", 10);
-  g1.addEdge("a", "b", 20);
-  g1.addEdge("a", "c", 30);
-  storage.addGraph("gr1", g1);
-  std::cout << "storage.size() = " << storage.size() << "\n";
+  std::ifstream file(argv[1]);
+  if (!(file.is_open())) {
+    return 1;
+  }
+  if (!madieva::readGraphs(file, storage)) return 1;
 
   using Commands = void(*)(std::istream &,
     std::ostream &, madieva::GraphStorage &);

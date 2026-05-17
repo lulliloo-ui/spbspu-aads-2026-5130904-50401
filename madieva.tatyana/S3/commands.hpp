@@ -407,7 +407,7 @@ namespace madieva {
 
 
     const HashTable< std::pair< std::string, std::string >, List< size_t >,
-      PairHash, PairEqual > edges = graph.getEdges();
+      PairHash, PairEqual > & edges = graph.getEdges();
     HTCIter< std::pair< std::string, std::string >, List< size_t >,
       PairHash, PairEqual > e_it = edges.begin();
 
