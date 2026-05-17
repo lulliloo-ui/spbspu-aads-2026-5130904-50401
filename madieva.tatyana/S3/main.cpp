@@ -29,6 +29,7 @@ namespace madieva {
         return false;
       }
     }
+    return true;
   }
 }
 
@@ -48,7 +49,7 @@ int main(int argc, char * argv[])
   using Commands = void(*)(std::istream &,
     std::ostream &, madieva::GraphStorage &);
   madieva::HashTable< std::string, Commands,
-    madieva::StringHash, madieva::StringEqual> commands;
+    madieva::XXHash64, madieva::StringEqual> commands;
   commands.add("graphs", madieva::cmd_graphs);
   commands.add("vertexes", madieva::cmd_vertexes);
   commands.add("outbound", madieva::cmd_outbound);

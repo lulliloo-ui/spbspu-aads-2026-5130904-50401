@@ -4,23 +4,14 @@
 
 #include <string>
 #include "hash_table.hpp"
-#include "../common/xxhash.h"
+#include "xxhash.hpp"
 
 namespace madieva {
-   struct PairHash {
-    size_t operator()(const std::pair< std::string, std::string > & k) const;
-  };
-
-  struct PairEqual {
-    bool operator()(const std::pair< std::string, std::string > & a,
-      const std::pair< std::string, std::string > & b) const;
-  };
-
   class Graph {
     std::string name_graph;
     using key = std::pair<std::string, std::string>;
     using val = List< size_t >;
-    HashTable< key, val, PairHash, PairEqual > edge_;
+    HashTable< key, val, XXHash64, PairEqual > edge_;
     List< std::string > vertex_;
   public:
     Graph(const std::string & name);
@@ -28,25 +19,12 @@ namespace madieva {
     void addVertex(const std::string & v);
     bool hasVertex(const std::string & v) const;
     const List< std::string > & getVertices() const;
-    HashTable< key, val, PairHash, PairEqual > & getEdges();
-    const HashTable< key, val, PairHash, PairEqual > & getEdges() const;
+    HashTable< key, val, XXHash64, PairEqual > & getEdges();
+    const HashTable< key, val, XXHash64, PairEqual > & getEdges() const;
     void addEdge(const std::string & a, const std::string & b, size_t e);
     void addEdge(const key & a, size_t weight);
 
   };
-
-  size_t PairHash::operator()(const std::pair< std::string, std::string > & k) const
-  {
-    XXH64_hash_t h = XXH64(k.first.data(), k.first.size(), 0);
-    h = XXH64(k.second.data(), k.second.size(), h);
-    return static_cast< size_t >(h);
-  }
-
-  bool PairEqual::operator()(const std::pair< std::string, std::string > & a,
-    const std::pair< std::string, std::string > & b) const
-  {
-    return a.first == b.first && a.second == b.second;
-  }
 
   Graph::Graph(const std::string & name) :
     name_graph(name)
@@ -81,12 +59,12 @@ namespace madieva {
     return vertex_;
   }
 
-  HashTable< Graph::key, Graph::val, PairHash, PairEqual > & Graph::getEdges()
+  HashTable< Graph::key, Graph::val, XXHash64, PairEqual > & Graph::getEdges()
   {
     return edge_;
   }
 
-  const HashTable< Graph::key, Graph::val, PairHash, PairEqual > & Graph::getEdges() const
+  const HashTable< Graph::key, Graph::val, XXHash64, PairEqual > & Graph::getEdges() const
   {
     return edge_;
   }

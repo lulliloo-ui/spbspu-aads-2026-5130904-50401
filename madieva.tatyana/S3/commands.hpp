@@ -332,9 +332,9 @@ namespace madieva {
       ++it2;
     }
     const HashTable< std::pair< std::string, std::string >,
-      List< size_t >, PairHash, PairEqual > & edges1 = graph1.getEdges();
+      List< size_t >, XXHash64, PairEqual > & edges1 = graph1.getEdges();
     HTCIter< std::pair< std::string, std::string >,
-      List< size_t >, PairHash, PairEqual > e_it1 = edges1.begin();
+      List< size_t >, XXHash64, PairEqual > e_it1 = edges1.begin();
     for (; e_it1 != edges1.end(); ++e_it1) {
       const std::pair<std::string, std::string> & key = (*e_it1).first;
       const List<size_t> & edge = (*e_it1).second;
@@ -346,9 +346,9 @@ namespace madieva {
     }
 
     const HashTable< std::pair< std::string, std::string >,
-      List< size_t >, PairHash, PairEqual > & edges2 = graph2.getEdges();
+      List< size_t >, XXHash64, PairEqual > & edges2 = graph2.getEdges();
     HTCIter< std::pair< std::string, std::string >,
-      List< size_t >, PairHash, PairEqual > e_it2 = edges2.begin();
+      List< size_t >, XXHash64, PairEqual > e_it2 = edges2.begin();
     for (; e_it2 != edges2.end(); ++e_it2) {
       const std::pair<std::string, std::string> & key = (*e_it2).first;
       const List<size_t> & edge = (*e_it2).second;
@@ -407,9 +407,9 @@ namespace madieva {
 
 
     const HashTable< std::pair< std::string, std::string >, List< size_t >,
-      PairHash, PairEqual > & edges = graph.getEdges();
+      XXHash64, PairEqual > & edges = graph.getEdges();
     HTCIter< std::pair< std::string, std::string >, List< size_t >,
-      PairHash, PairEqual > e_it = edges.begin();
+      XXHash64, PairEqual > e_it = edges.begin();
 
     for (; e_it != edges.end(); ++e_it) {
       const std::pair< std::string, std::string > & key = (*e_it).first;
