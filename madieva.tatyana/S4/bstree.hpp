@@ -9,6 +9,12 @@ namespace madieva {
   template< class Key, class Value, class Compare >
   class BSTree;
 
+  template< class Key, class Value, class Compare >
+  class TIter;
+
+  template< class Key, class Value, class Compare >
+  class TCIter;
+
   template < class Key, class Value, class Compare >
   class Node {
     Node< Key, Value, Compare > * left;
@@ -26,8 +32,15 @@ namespace madieva {
   class BSTree {
     Node< Key, Value, Compare> * root_;
     Compare cmp_;
-    Node< Key, Value, Compare > * minimum(Node< Key, Value, Compare > * node);
-    Node< Key, Value, Compare > * maximum(Node< Key, Value, Compare > * node);
+    Node< Key, Value, Compare > *
+      minimum(Node< Key, Value, Compare > * node);
+    const Node< Key, Value, Compare > *
+      minimum(const Node< Key, Value, Compare > * node);
+    Node< Key, Value, Compare > *
+      maximum(Node< Key, Value, Compare > * node);
+    void clear(Node< Key, Value, Compare > * node);
+    friend class TIter< Key, Value, Compare >;
+    friend class TCIter< Key, Value, Compare >;
   public:
     BSTree();
     void push(const Key & k, const Value & v);
@@ -35,6 +48,10 @@ namespace madieva {
     Value & get(const Key & k);
     void drop(const Key & k);
     ~BSTree();
+    TIter< Key, Value, Compare > begin();
+    TIter< Key, Value, Compare > end();
+    TCIter< Key, Value, Compare > begin() const;
+    TCIter< Key, Value, Compare > end() const;
   };
 
   template < class Key, class Value, class Compare>
@@ -65,6 +82,19 @@ namespace madieva {
     return node;
   }
 
+  template < class Key, class Value, class Compare>
+  const Node< Key, Value, Compare > *
+    BSTree< Key, Value, Compare >::minimum(const Node< Key, Value, Compare > * node)
+  {
+    if (!node) {
+      return nullptr;
+    }
+    while (node->left) {
+      node = node->left;
+    }
+    return node;
+  }
+
   template < class Key, class Value, class Compare >
   Node< Key, Value, Compare > * BSTree< Key, Value, Compare >::maximum(Node< Key, Value, Compare >* node) {
     if (!node) {
@@ -77,6 +107,17 @@ namespace madieva {
   }
 
   template< typename Key, typename Value, typename Compare >
+  void BSTree< Key, Value, Compare >::clear(Node< Key, Value, Compare > * node)
+  {
+    if (!node) {
+      return;
+    }
+    clear(node->left);
+    clear(node->right);
+    delete node;
+  }
+
+  template< typename Key, typename Value, typename Compare >
   BSTree< Key, Value, Compare >::BSTree() :
     root_(nullptr),
     cmp_()
@@ -85,36 +126,32 @@ namespace madieva {
   template < class Key, class Value, class Compare>
   void BSTree< Key, Value, Compare >::push(const Key & k, const Value & v)
   {
-    try {
-      Node< Key, Value, Compare > * n = new Node< Key, Value, Compare >(k, v);
-      if (!root_) {
-        root_ = n;
-        return;
-      }
-      Node< Key, Value, Compare > * curr = root_;
-      while (curr) {
-        if (cmp_(n->data.first, curr->data.first)) {
-          if (!curr->left) {
-            curr->left = n;
-            n->parent = curr;
-            return;
-          }
-          curr = curr->left;
-        } else if (cmp_(curr->data.first, n->data.first)) {
-          if (!curr->right) {
-            curr->right = n;
-            n->parent = curr;
-            return;
-          }
-          curr = curr->right;
-        } else {
-          delete n;
+    Node< Key, Value, Compare > * n = nullptr;
+    n = new Node< Key, Value, Compare >(k, v);
+    if (!root_) {
+      root_ = n;
+      return;
+    }
+    Node< Key, Value, Compare > * curr = root_;
+    while (curr) {
+      if (cmp_(n->data.first, curr->data.first)) {
+        if (!curr->left) {
+          curr->left = n;
+          n->parent = curr;
           return;
         }
+        curr = curr->left;
+      } else if (cmp_(curr->data.first, n->data.first)) {
+        if (!curr->right) {
+          curr->right = n;
+          n->parent = curr;
+          return;
+        }
+        curr = curr->right;
+      } else {
+        delete n;
+        return;
       }
-    } catch (...) {
-      delete n;
-      throw;
     }
   }
 
@@ -206,6 +243,38 @@ namespace madieva {
     throw std::out_of_range("Key not found");
   }
 
+  template < class Key, class Value, class Compare>
+  BSTree< Key, Value, Compare >::~BSTree()
+  {
+    clear(root_);
+  }
+
+  template < class Key, class Value, class Compare>
+  TIter< Key, Value, Compare > BSTree< Key, Value, Compare >::begin()
+  {
+    return TIter< Key, Value, Compare >(minimum(root_));
+  }
+
+  template < class Key, class Value, class Compare>
+  TIter< Key, Value, Compare > BSTree< Key, Value, Compare >::end()
+  {
+    return TIter< Key, Value, Compare >(nullptr);
+  }
+
+  template < class Key, class Value, class Compare>
+  TCIter< Key, Value, Compare > BSTree< Key, Value, Compare >::begin() const
+  {
+    return TCIter< Key, Value, Compare >(minimum(root_));
+  }
+
+  template < class Key, class Value, class Compare>
+  TCIter< Key, Value, Compare > BSTree< Key, Value, Compare >::end() const
+  {
+    return TCIter< Key, Value, Compare >(nullptr);
+  }
 }
+
+#include "tree_iterator.hpp"
+
 
 #endif
