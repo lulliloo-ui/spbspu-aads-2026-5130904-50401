@@ -47,6 +47,8 @@ namespace madieva {
     const Value & get(const Key & k) const;
     Value & get(const Key & k);
     void drop(const Key & k);
+    bool has(const Key & k) const;
+    bool has(const Key & k);
     ~BSTree();
 
     TIter< Key, Value, Compare > begin();
@@ -193,6 +195,38 @@ namespace madieva {
       }
     }
     throw std::out_of_range("Key not found");
+  }
+
+  template < class Key, class Value, class Compare>
+  bool BSTree< Key, Value, Compare >::has(const Key & k) const
+  {
+    const Node< Key, Value, Compare > * curr = root_;
+    while(curr) {
+      if (cmp_(k, curr->data.first)) {
+        curr = curr->left;
+      } else if (cmp_(curr->data.first, k)) {
+        curr = curr->right;
+      } else {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  template < class Key, class Value, class Compare>
+  bool BSTree< Key, Value, Compare >::has(const Key & k)
+  {
+    Node< Key, Value, Compare > * curr = root_;
+    while(curr) {
+      if (cmp_(k, curr->data.first)) {
+        curr = curr->left;
+      } else if (cmp_(curr->data.first, k)) {
+        curr = curr->right;
+      } else {
+        return true;
+      }
+    }
+    return false;
   }
 
   template < class Key, class Value, class Compare>
