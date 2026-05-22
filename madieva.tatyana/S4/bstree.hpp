@@ -48,10 +48,18 @@ namespace madieva {
     Value & get(const Key & k);
     void drop(const Key & k);
     ~BSTree();
+
     TIter< Key, Value, Compare > begin();
     TIter< Key, Value, Compare > end();
     TCIter< Key, Value, Compare > begin() const;
     TCIter< Key, Value, Compare > end() const;
+
+    TIter< Key, Value, Compare > rotateLeft(TIter< Key, Value, Compare > it);
+    TIter< Key, Value, Compare > rotateRight(TIter< Key, Value, Compare > it);
+    TIter< Key, Value, Compare > rotateLargeLeft(TIter< Key, Value, Compare > it);
+    TIter< Key, Value, Compare > rotateLargeRight(TIter< Key, Value, Compare > it);
+
+
   };
 
   template < class Key, class Value, class Compare>
@@ -272,9 +280,91 @@ namespace madieva {
   {
     return TCIter< Key, Value, Compare >(nullptr);
   }
+
+  template < class Key, class Value, class Compare>
+  TIter< Key, Value, Compare > BSTree< Key, Value, Compare >::rotateLeft(TIter< Key, Value, Compare > it)
+  {
+    if (!it.it_ || !it.it_->right) {
+      throw std::logic_error("Cannot rotate left");
+    }
+    TIter< Key, Value, Compare > it2(it.it_->right);
+    TIter< Key, Value, Compare > parent(it.it_->parent);
+    if (parent.it_) {
+      if (parent.it_->left == it.it_) {
+        parent.it_->left = it2.it_;
+      } else {
+        parent.it_->right = it2.it_;
+      }
+    } else {
+      root_ = it2.it_;
+    }
+    it2.it_->parent = parent.it_;
+    it.it_->parent = it2.it_;
+    if (it2.it_->left) {
+      it.it_->right = it2.it_->left;
+      it.it_->right->parent = it.it_;
+    } else {
+      it.it_->right = nullptr;
+    }
+    it2.it_->left = it.it_;
+    return it2;
+  }
+
+  template < class Key, class Value, class Compare>
+  TIter< Key, Value, Compare > BSTree< Key, Value, Compare >::rotateRight(TIter< Key, Value, Compare > it)
+  {
+    if (!it.it_ || !it.it_->left) {
+      throw std::logic_error("Cannot rotate right");
+    }
+    TIter< Key, Value, Compare > it2(it.it_->left);
+    TIter< Key, Value, Compare > parent(it.it_->parent);
+    if (parent.it_) {
+      if (parent.it_->left == it.it_) {
+        parent.it_->left = it2.it_;
+      } else {
+        parent.it_->right = it2.it_;
+      }
+    } else {
+      root_ = it2.it_;
+    }
+    it2.it_->parent = parent.it_;
+    it.it_->parent = it2.it_;
+    if (it2.it_->right) {
+      it.it_->left = it2.it_->right;
+      it.it_->left->parent = it.it_;
+    } else {
+      it.it_->left = nullptr;
+    }
+    it2.it_->right = it.it_;
+    return it2;
+  }
+
+  template < class Key, class Value, class Compare>
+  TIter< Key, Value, Compare > BSTree< Key, Value, Compare >::rotateLargeLeft(TIter< Key, Value, Compare > it)
+  {
+    if (!it.it_ || !it.it_->right || !it.it_->right->left) {
+      throw std::logic_error("Cannot rotate large left");
+    }
+    TIter< Key, Value, Compare > it2(it.it_->right);
+    rotateRight(it2);
+    return rotateLeft(it);
+  }
+
+  template < class Key, class Value, class Compare>
+  TIter< Key, Value, Compare > BSTree< Key, Value, Compare >::rotateLargeRight(TIter< Key, Value, Compare > it)
+  {
+    if (!it.it_ || !it.it_->left || !it.it_->left->right) {
+      throw std::logic_error("Cannot rotate large right");
+    }
+    TIter< Key, Value, Compare > it2(it.it_->left);
+    rotateLeft(it2);
+    return rotateRight(it);
+  }
+
 }
 
 #include "tree_iterator.hpp"
+#include "tree_citerator.hpp"
 
 
 #endif
