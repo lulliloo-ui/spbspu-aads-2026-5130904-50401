@@ -1,18 +1,10 @@
 #include "bstree.hpp"
+#include "commands.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
 namespace madieva {
-
-  struct Dictionary {
-    BSTree< size_t, std::string, std::less< size_t > > dictionary;
-  };
-
-  struct Dictionarycollection {
-    BSTree< std::string,
-      Dictionary, std::less< std::string > > collection;
-  };
 
   bool read(std::istream & file, Dictionarycollection & storage)
   {
@@ -50,10 +42,33 @@ int main(int argc, char * argv[])
   if (!(file.is_open())) {
     return 1;
   }
+
+  madieva::Commands commands;
+  commands.comm.push("print", madieva::cmd_print);
+  commands.comm.push("complement", madieva::cmd_complement);
+  commands.comm.push("intersect", madieva::cmd_intersect);
+  commands.comm.push("union", madieva::cmd_union);
+
   madieva::Dictionarycollection storage;
   if (!madieva::read(file, storage)) {
     return 1;
   }
-  return 0;
 
+  std::string line;
+  while (std::getline(std::cin, line)) {
+    std::istringstream iss(line);
+    std::string comm;
+    if (!(iss >> comm)) {
+      std::cout << "<INVALID COMMAND>\n";
+      continue;
+    }
+    if (commands.comm.has(comm)) {
+      commands.comm.get(comm)(iss, std::cout, storage);
+    }
+    else {
+      std::cout << "<INVALID COMMAND>\n";
+    }
+  }
+
+  return 0;
 }
