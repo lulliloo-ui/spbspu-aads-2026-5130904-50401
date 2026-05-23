@@ -128,7 +128,7 @@ namespace madieva {
   }
 
   template < class Key, class Value, class Compare>
-  Node< Key, Value, Compare > * 
+  Node< Key, Value, Compare > *
     BSTree< Key, Value, Compare >::cloneNode(const Node< Key, Value, Compare > * src, Node< Key, Value, Compare > * parent)
   {
     if (!src) return nullptr;
@@ -157,7 +157,7 @@ namespace madieva {
   {}
 
   template < class Key, class Value, class Compare>
-  BSTree< Key, Value, Compare >::BSTree(const BSTree& other) : 
+  BSTree< Key, Value, Compare >::BSTree(const BSTree& other) :
     root_(nullptr), cmp_(other.cmp_)
   {
     root_ = cloneNode(other.root_, nullptr);
