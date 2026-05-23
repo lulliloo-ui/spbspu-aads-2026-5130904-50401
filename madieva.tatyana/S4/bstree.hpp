@@ -164,7 +164,7 @@ namespace madieva {
   }
 
   template < class Key, class Value, class Compare>
-  BSTree< Key, Value, Compare >& 
+  BSTree< Key, Value, Compare >&
     BSTree< Key, Value, Compare >::operator=(const BSTree& other)
   {
     if (this != &other) {
