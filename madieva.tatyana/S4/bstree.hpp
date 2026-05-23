@@ -22,6 +22,8 @@ namespace madieva {
     Node< Key, Value, Compare > * parent;
     std::pair< Key, Value > data;
     friend class BSTree< Key, Value, Compare >;
+    friend class TIter< Key, Value, Compare >;
+    friend class TCIter< Key, Value, Compare >;
   public:
     Node(const Key & k, const Value & v);
     Node(Key && k, Value && v);
@@ -35,7 +37,7 @@ namespace madieva {
     Node< Key, Value, Compare > *
       minimum(Node< Key, Value, Compare > * node);
     const Node< Key, Value, Compare > *
-      minimum(const Node< Key, Value, Compare > * node);
+      minimum(const Node< Key, Value, Compare > * node) const;
     Node< Key, Value, Compare > *
       maximum(Node< Key, Value, Compare > * node);
     void clear(Node< Key, Value, Compare > * node);
@@ -95,7 +97,7 @@ namespace madieva {
 
   template < class Key, class Value, class Compare>
   const Node< Key, Value, Compare > *
-    BSTree< Key, Value, Compare >::minimum(const Node< Key, Value, Compare > * node)
+    BSTree< Key, Value, Compare >::minimum(const Node< Key, Value, Compare > * node) const
   {
     if (!node) {
       return nullptr;
@@ -294,7 +296,11 @@ namespace madieva {
   template < class Key, class Value, class Compare>
   TIter< Key, Value, Compare > BSTree< Key, Value, Compare >::begin()
   {
-    return TIter< Key, Value, Compare >(minimum(root_));
+    Node< Key, Value, Compare > * node = root_;
+    while (node && node->left) {
+      node = node->left;
+    }
+    return TIter< Key, Value, Compare >(node);
   }
 
   template < class Key, class Value, class Compare>
@@ -306,7 +312,11 @@ namespace madieva {
   template < class Key, class Value, class Compare>
   TCIter< Key, Value, Compare > BSTree< Key, Value, Compare >::begin() const
   {
-    return TCIter< Key, Value, Compare >(minimum(root_));
+    const Node< Key, Value, Compare > * node = root_;
+    while (node && node->left) {
+      node = node->left;
+    }
+    return TCIter< Key, Value, Compare >(node);
   }
 
   template < class Key, class Value, class Compare>
