@@ -10,6 +10,7 @@ namespace madieva {
   template< class Key, class Value, class Compare >
   class TIter{
     Node< Key, Value, Compare > * it_;
+    friend class BSTree< Key, Value, Compare >;
   public:
     TIter(Node< Key, Value, Compare > * root);
     TIter & operator++();
@@ -49,7 +50,10 @@ namespace madieva {
   template< class Key, class Value, class Compare >
   std::pair< Key, Value > & TIter< Key, Value, Compare >::operator*()
   {
-    return (it_->data);
+    if (!it_) {
+      throw std::logic_error("Dereferencing null iterator");
+    }
+    return it_->data;
   }
 
   template< class Key, class Value, class Compare >

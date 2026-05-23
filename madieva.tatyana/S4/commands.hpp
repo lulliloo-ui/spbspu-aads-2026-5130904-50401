@@ -5,7 +5,7 @@
 #include "iostream"
 namespace madieva {
   struct Dictionary {
-    BSTree< size_t, std::string, std::less< size_t > > dictionary;
+    BSTree< int, std::string, std::less< int > > dictionary;
   };
 
   struct Dictionarycollection {
@@ -38,7 +38,7 @@ namespace madieva {
       return;
     }
     out << name;
-    TCIter< size_t, std::string, std::less< size_t > > it = dict.dictionary.begin();
+    TCIter< int, std::string, std::less< int > > it = dict.dictionary.begin();
     for(; it != dict.dictionary.end(); ++it) {
       out << " " << (*it).first << " " << (*it).second;
     }
@@ -80,10 +80,10 @@ namespace madieva {
 
     const Dictionary & dict1 = storage.collection.get(name1);
     const Dictionary & dict2 = storage.collection.get(name2);
-    TCIter< size_t, std::string, std::less< size_t > > it1 = dict1.dictionary.begin();
+    TCIter< int, std::string, std::less< int > > it1 = dict1.dictionary.begin();
     Dictionary new_dict;
     for (; it1 != dict1.dictionary.end(); ++it1) {
-      size_t key = (*it1).first;
+      int key = (*it1).first;
       const std::string & value = (*it1).second;
       if (!dict2.dictionary.has(key)) {
         new_dict.dictionary.push(key, value);
@@ -126,10 +126,10 @@ namespace madieva {
 
     const Dictionary & dict1 = storage.collection.get(name1);
     const Dictionary & dict2 = storage.collection.get(name2);
-    TCIter< size_t, std::string, std::less< size_t > > it1 = dict1.dictionary.begin();
+    TCIter< int, std::string, std::less< int > > it1 = dict1.dictionary.begin();
     Dictionary new_dict;
     for (; it1 != dict1.dictionary.end(); ++it1) {
-      size_t key = (*it1).first;
+      int key = (*it1).first;
       const std::string & value = (*it1).second;
       if (dict2.dictionary.has(key)) {
         new_dict.dictionary.push(key, value);
@@ -172,16 +172,16 @@ namespace madieva {
 
     const Dictionary & dict1 = storage.collection.get(name1);
     const Dictionary & dict2 = storage.collection.get(name2);
-    TCIter< size_t, std::string, std::less< size_t > > it1 = dict1.dictionary.begin();
+    TCIter< int, std::string, std::less< int > > it1 = dict1.dictionary.begin();
     Dictionary new_dict;
     for (; it1 != dict1.dictionary.end(); ++it1) {
-      size_t key = (*it1).first;
+      int key = (*it1).first;
       const std::string & value = (*it1).second;
       new_dict.dictionary.push(key, value);
     }
-    TCIter< size_t, std::string, std::less< size_t > > it2 = dict2.dictionary.begin();
+    TCIter< int, std::string, std::less< int > > it2 = dict2.dictionary.begin();
     for (; it2 != dict2.dictionary.end(); ++it2) {
-      size_t key = (*it2).first;
+      int key = (*it2).first;
       const std::string & value = (*it2).second;
       if (!dict1.dictionary.has(key)) {
         new_dict.dictionary.push(key, value);

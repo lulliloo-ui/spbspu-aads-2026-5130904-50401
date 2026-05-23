@@ -40,11 +40,15 @@ namespace madieva {
       minimum(const Node< Key, Value, Compare > * node) const;
     Node< Key, Value, Compare > *
       maximum(Node< Key, Value, Compare > * node);
+    Node< Key, Value, Compare > * cloneNode(const Node< Key, Value, Compare > * src,
+      Node< Key, Value, Compare > * parent);
     void clear(Node< Key, Value, Compare > * node);
     friend class TIter< Key, Value, Compare >;
     friend class TCIter< Key, Value, Compare >;
   public:
     BSTree();
+    BSTree(const BSTree& other);
+    BSTree& operator=(const BSTree& other);
     void push(const Key & k, const Value & v);
     const Value & get(const Key & k) const;
     Value & get(const Key & k);
@@ -123,6 +127,18 @@ namespace madieva {
     return node;
   }
 
+  template < class Key, class Value, class Compare>
+  Node< Key, Value, Compare > * 
+    BSTree< Key, Value, Compare >::cloneNode(const Node< Key, Value, Compare > * src, Node< Key, Value, Compare > * parent)
+  {
+    if (!src) return nullptr;
+    Node< Key, Value, Compare > * n = new Node< Key, Value, Compare >(src->data.first, src->data.second);
+    n->parent = parent;
+    n->left  = cloneNode(src->left,  n);
+    n->right = cloneNode(src->right, n);
+    return n;
+  }
+
   template< typename Key, typename Value, typename Compare >
   void BSTree< Key, Value, Compare >::clear(Node< Key, Value, Compare > * node)
   {
@@ -139,6 +155,26 @@ namespace madieva {
     root_(nullptr),
     cmp_()
   {}
+
+  template < class Key, class Value, class Compare>
+  BSTree< Key, Value, Compare >::BSTree(const BSTree& other) : 
+    root_(nullptr), cmp_(other.cmp_)
+  {
+    root_ = cloneNode(other.root_, nullptr);
+  }
+
+  template < class Key, class Value, class Compare>
+  BSTree< Key, Value, Compare >& 
+    BSTree< Key, Value, Compare >::operator=(const BSTree& other)
+  {
+    if (this != &other) {
+      clear(root_);
+      root_ = nullptr;
+      cmp_ = other.cmp_;
+      root_ = cloneNode(other.root_, nullptr);
+    }
+    return *this;
+  }
 
   template < class Key, class Value, class Compare>
   void BSTree< Key, Value, Compare >::push(const Key & k, const Value & v)
@@ -224,7 +260,6 @@ namespace madieva {
     }
     return false;
   }
-
 
   template < class Key, class Value, class Compare>
   TIter< Key, Value, Compare > BSTree< Key, Value, Compare >::find(const Key & k)

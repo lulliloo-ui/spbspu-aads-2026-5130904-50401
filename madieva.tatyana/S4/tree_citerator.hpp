@@ -10,6 +10,7 @@ namespace madieva {
   template< class Key, class Value, class Compare >
   class TCIter{
     const Node< Key, Value, Compare > * it_;
+    friend class BSTree< Key, Value, Compare >;
   public:
     TCIter(const Node< Key, Value, Compare > * root);
     const TCIter & operator++();
@@ -49,7 +50,10 @@ namespace madieva {
   template< class Key, class Value, class Compare >
   const std::pair< Key, Value > & TCIter< Key, Value, Compare >::operator*() const
   {
-    return (it_->data);
+    if (!it_) {
+      throw std::logic_error("Dereferencing null iterator");
+    }
+    return it_->data;
   }
 
   template< class Key, class Value, class Compare >

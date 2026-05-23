@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE(rotate_right_simple)
   ++it3;
   ++it3;
 
-  auto new_root_it = tree.rotateRight(it1);
+  auto new_root_it = tree.rotateRight(it3);
 
   BOOST_CHECK_EQUAL((*it1).first, 5);
   BOOST_CHECK_EQUAL((*it2).first, 7);
@@ -299,13 +299,13 @@ BOOST_AUTO_TEST_CASE(rotate_left_node_heights)
 
   BOOST_CHECK_EQUAL(tree.height(it10), 3);
   BOOST_CHECK_EQUAL(tree.height(it15), 1);
-  BOOST_CHECK_EQUAL(tree.height(it20), 1);
+  BOOST_CHECK_EQUAL(tree.height(it20), 2);
 
   tree.rotateLeft(it10);
 
   BOOST_CHECK_EQUAL(tree.height(it10), 2);
   BOOST_CHECK_EQUAL(tree.height(it15), 1);
-  BOOST_CHECK_EQUAL(tree.height(it20), 1);
+  BOOST_CHECK_EQUAL(tree.height(it20), 3);
 }
 
 BOOST_AUTO_TEST_CASE(rotate_right_node_heights)
@@ -320,13 +320,13 @@ BOOST_AUTO_TEST_CASE(rotate_right_node_heights)
   auto it20 = tree.find(20);
 
   BOOST_CHECK_EQUAL(tree.height(it20), 3);
-  BOOST_CHECK_EQUAL(tree.height(it10), 1);
+  BOOST_CHECK_EQUAL(tree.height(it10), 2);
   BOOST_CHECK_EQUAL(tree.height(it15), 1);
 
   tree.rotateRight(it20);
 
   BOOST_CHECK_EQUAL(tree.height(it20), 2);
-  BOOST_CHECK_EQUAL(tree.height(it10), 1);
+  BOOST_CHECK_EQUAL(tree.height(it10), 3);
   BOOST_CHECK_EQUAL(tree.height(it15), 1);
 }
 
@@ -343,7 +343,7 @@ BOOST_AUTO_TEST_CASE(rotate_large_left_node_heights)
 
   BOOST_CHECK_EQUAL(tree.height(it10), 3);
   BOOST_CHECK_EQUAL(tree.height(it15), 1);
-  BOOST_CHECK_EQUAL(tree.height(it20), 1);
+  BOOST_CHECK_EQUAL(tree.height(it20), 2);
 
   tree.rotateLargeLeft(it10);
 
@@ -364,7 +364,7 @@ BOOST_AUTO_TEST_CASE(rotate_large_right_node_heights)
   auto it20 = tree.find(20);
 
   BOOST_CHECK_EQUAL(tree.height(it20), 3);
-  BOOST_CHECK_EQUAL(tree.height(it10), 1);
+  BOOST_CHECK_EQUAL(tree.height(it10), 2);
   BOOST_CHECK_EQUAL(tree.height(it15), 1);
 
   tree.rotateLargeRight(it20);
@@ -372,6 +372,44 @@ BOOST_AUTO_TEST_CASE(rotate_large_right_node_heights)
   BOOST_CHECK_EQUAL(tree.height(it20), 1);
   BOOST_CHECK_EQUAL(tree.height(it10), 1);
   BOOST_CHECK_EQUAL(tree.height(it15), 2);
+}
+
+BOOST_AUTO_TEST_CASE(rotate_left_throws_on_no_right_child)
+{
+  madieva::BSTree< int, std::string, std::less< int > > tree;
+  tree.push(10, "a");
+
+  auto it = tree.find(10);
+  BOOST_CHECK_THROW(tree.rotateLeft(it), std::logic_error);
+}
+
+BOOST_AUTO_TEST_CASE(rotate_right_throws_on_no_left_child)
+{
+  madieva::BSTree< int, std::string, std::less< int > > tree;
+  tree.push(10, "a");
+
+  auto it = tree.find(10);
+  BOOST_CHECK_THROW(tree.rotateRight(it), std::logic_error);
+}
+
+BOOST_AUTO_TEST_CASE(rotate_large_left_throws_on_wrong_structure)
+{
+  madieva::BSTree< int, std::string, std::less< int > > tree;
+  tree.push(10, "a");
+  tree.push(20, "b");
+
+  auto it = tree.find(10);
+  BOOST_CHECK_THROW(tree.rotateLargeLeft(it), std::logic_error);
+}
+
+BOOST_AUTO_TEST_CASE(rotate_large_right_throws_on_wrong_structure)
+{
+  madieva::BSTree< int, std::string, std::less< int > > tree;
+  tree.push(20, "a");
+  tree.push(10, "b");
+
+  auto it = tree.find(20);
+  BOOST_CHECK_THROW(tree.rotateLargeRight(it), std::logic_error);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
