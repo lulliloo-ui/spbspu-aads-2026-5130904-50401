@@ -65,10 +65,6 @@ namespace madieva {
       return;
     }
 
-    if (storage.collection.has(new_name)) {
-      out << "<INVALID COMMAND>\n";
-      return;
-    }
     if (!storage.collection.has(name1)) {
       out << "<INVALID COMMAND>\n";
       return;
@@ -88,6 +84,9 @@ namespace madieva {
       if (!dict2.dictionary.has(key)) {
         new_dict.dictionary.push(key, value);
       }
+    }
+   if (storage.collection.has(new_name)) {
+      storage.collection.drop(new_name);
     }
     storage.collection.push(new_name, new_dict);
   }
@@ -111,10 +110,6 @@ namespace madieva {
       return;
     }
 
-    if (storage.collection.has(new_name)) {
-      out << "<INVALID COMMAND>\n";
-      return;
-    }
     if (!storage.collection.has(name1)) {
       out << "<INVALID COMMAND>\n";
       return;
@@ -134,6 +129,9 @@ namespace madieva {
       if (dict2.dictionary.has(key)) {
         new_dict.dictionary.push(key, value);
       }
+    }
+    if (storage.collection.has(new_name)) {
+      storage.collection.drop(new_name);
     }
     storage.collection.push(new_name, new_dict);
   }
@@ -157,10 +155,6 @@ namespace madieva {
       return;
     }
 
-    if (storage.collection.has(new_name)) {
-      out << "<INVALID COMMAND>\n";
-      return;
-    }
     if (!storage.collection.has(name1)) {
       out << "<INVALID COMMAND>\n";
       return;
@@ -186,6 +180,9 @@ namespace madieva {
       if (!dict1.dictionary.has(key)) {
         new_dict.dictionary.push(key, value);
       }
+    }
+    if (storage.collection.has(new_name)) {
+      storage.collection.drop(new_name);
     }
     storage.collection.push(new_name, new_dict);
   }
