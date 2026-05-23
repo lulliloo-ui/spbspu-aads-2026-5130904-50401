@@ -14,8 +14,8 @@ namespace madieva {
     TIter(Node< Key, Value, Compare > * root);
     TIter & operator++();
     std::pair< Key, Value > & operator*();
-    bool operator!=(TIter< Key, Value, Compare > & other) const;
-    bool operator==(TIter< Key, Value, Compare > & other) const;
+    bool operator!=(const TIter< Key, Value, Compare > & other) const;
+    bool operator==(const TIter< Key, Value, Compare > & other) const;
   };
 
   template< class Key, class Value, class Compare >
@@ -53,13 +53,13 @@ namespace madieva {
   }
 
   template< class Key, class Value, class Compare >
-  bool TIter< Key, Value, Compare >::operator!=(TIter< Key, Value, Compare > & other) const
+  bool TIter< Key, Value, Compare >::operator!=(const TIter< Key, Value, Compare > & other) const
   {
     return it_ != other.it_;
   }
 
   template< class Key, class Value, class Compare >
-  bool TIter< Key, Value, Compare >::operator==(TIter< Key, Value, Compare > & other) const
+  bool TIter< Key, Value, Compare >::operator==(const TIter< Key, Value, Compare > & other) const
   {
     return it_ == other.it_;
   }

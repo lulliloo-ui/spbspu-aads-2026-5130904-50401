@@ -12,7 +12,7 @@ namespace madieva {
     const Node< Key, Value, Compare > * it_;
   public:
     TCIter(const Node< Key, Value, Compare > * root);
-    TCIter & operator++();
+    const TCIter & operator++();
     const std::pair< Key, Value > & operator*() const;
     bool operator!=(const TCIter< Key, Value, Compare > & other) const;
     bool operator==(const TCIter< Key, Value, Compare > & other) const;
@@ -24,7 +24,7 @@ namespace madieva {
   {}
 
   template< class Key, class Value, class Compare >
-  TCIter< Key, Value, Compare > &
+  const TCIter< Key, Value, Compare > &
     TCIter< Key, Value, Compare >::operator++()
   {
     if (!it_) {
