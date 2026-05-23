@@ -54,6 +54,8 @@ namespace madieva {
     TCIter< Key, Value, Compare > find(const Key & k) const;
     size_t height() const;
     size_t height(const Node< Key, Value, Compare > * node) const;
+    size_t height(TIter< Key, Value, Compare > it) const;
+    size_t height(TCIter< Key, Value, Compare > it) const;
     ~BSTree();
 
     TIter< Key, Value, Compare > begin();
@@ -253,7 +255,7 @@ namespace madieva {
         return TCIter< Key, Value, Compare >(curr);
       }
     }
-    return end(); 
+    return end();
   }
 
   template < class Key, class Value, class Compare>
@@ -325,6 +327,18 @@ namespace madieva {
     size_t leftH = height(node->left);
     size_t rightH = height(node->right);
     return 1 + (leftH > rightH ? leftH : rightH);
+  }
+
+  template < class Key, class Value, class Compare>
+  size_t BSTree< Key, Value, Compare >::height(TIter< Key, Value, Compare > it) const
+  {
+    return height(it.it_);
+  }
+
+  template < class Key, class Value, class Compare>
+  size_t BSTree< Key, Value, Compare >::height(TCIter< Key, Value, Compare > it) const
+  {
+    return height(it.it_);
   }
 
   template < class Key, class Value, class Compare>
