@@ -123,8 +123,8 @@ namespace madieva {
   template< class T >
   LIter<T> LIter< T >::operator--(int) noexcept
   {
-    assert(it != nullptr);
-    LIter<T> temp = *this;
+    assert(it != head_);
+    LIter< T > temp = *this;
     --(*this);
     return temp;
   }
@@ -188,16 +188,16 @@ namespace madieva {
   template< class T >
   LCIter<T> LCIter< T >::operator++(int) noexcept
   {
-    assert(it != nullptr);
-    LCIter<T> temp = *this;
-    ++(*this);
+    assert(it != head_);
+    LCIter< T > temp = *this;
+    --(*this);
     return temp;
   }
 
   template< class T >
   LCIter<T> LCIter< T >::operator--(int) noexcept
   {
-    assert(it != nullptr);
+    assert(it != head_);
     LCIter<T> temp = *this;
     --(*this);
     return temp;
