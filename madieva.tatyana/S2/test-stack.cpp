@@ -91,20 +91,6 @@ BOOST_AUTO_TEST_CASE(pop_when_the_stack_is_empty)
   BOOST_CHECK(s.size() == 0);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 BOOST_AUTO_TEST_CASE(clear_stack)
 {
   madieva::Stack< int > s;

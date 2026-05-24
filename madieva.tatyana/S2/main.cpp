@@ -1,8 +1,7 @@
+#include <fstream>
 #include "stack.hpp"
 #include "queue.hpp"
 #include "math.hpp"
-#include <fstream>
-
 
 int getPriority(char op) {
   if (op == '+' || op == '-') return 1;

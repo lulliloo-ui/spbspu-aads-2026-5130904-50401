@@ -1,9 +1,9 @@
 #ifndef MATH_HPP
 #define MATH_HPP
-#include "stack.hpp"
-#include "queue.hpp"
 #include <fstream>
 #include <limits>
+#include "stack.hpp"
+#include "queue.hpp"
 
 const long long MAX = std::numeric_limits<long long>::max();
 const long long MIN = std::numeric_limits<long long>::min();

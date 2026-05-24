@@ -1,32 +1,40 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
-#include "list.hpp"
 #include <stdexcept>
+#include "list.hpp"
 namespace madieva {
   template< class T >
   class Queue {
-    List< T > data;
   public:
     void push(const T & val);
+    void push(T && val);
     T & front();
     const T & front() const;
     size_t size() const noexcept;
-    void pop();
+    void pop() noexcept;
     void clear() noexcept;
     bool empty() const noexcept;
+  private:
+    List< T > data_;
   };
 
   template< class T >
   void Queue< T >::push(const T & val)
   {
-    data.push_back(val);
+    data_.push_back(val);
+  }
+
+  template< class T >
+  void Queue< T >::push(T && val)
+  {
+    data_.push_back(std::move(val));
   }
 
   template< class T >
   T & Queue< T >::front()
   {
     if (!empty()) {
-      LIter< T > it = data.begin();
+      LIter< T > it = data_.begin();
       return (*it);
     } else {
       throw std::runtime_error("Queue is empty");
@@ -37,7 +45,7 @@ namespace madieva {
   const T & Queue< T >::front() const
   {
     if (!empty()) {
-      LCIter< T > it = data.begin();
+      LCIter< T > it = data_.begin();
       return (*it);
     } else {
       throw std::runtime_error("Queue is empty");
@@ -47,25 +55,25 @@ namespace madieva {
   template< class T >
   size_t Queue< T >::size() const noexcept
   {
-    return data.size();
+    return data_.size();
   }
 
   template< class T >
-  void Queue< T >::pop()
+  void Queue< T >::pop() noexcept
   {
-    data.pop_front();
+    data_.pop_front();
   }
 
   template< class T >
   void Queue< T >::clear() noexcept
   {
-    data.clear();
+    data_.clear();
   }
 
   template< class T >
   bool Queue< T >::empty() const noexcept
   {
-    return data.size() == 0;
+    return data_.size() == 0;
   }
 }
 
