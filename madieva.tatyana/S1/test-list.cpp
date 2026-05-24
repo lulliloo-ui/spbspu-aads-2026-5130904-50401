@@ -4,20 +4,20 @@
 
 BOOST_AUTO_TEST_SUITE(ListTests)
 
-BOOST_AUTO_TEST_CASE(push_front_empty)
+BOOST_AUTO_TEST_CASE(pushFront_empty)
 {
   madieva::List< int > list;
-  BOOST_CHECK(list.size() == 0);
+  BOOST_CHECK(list.getSize() == 0);
 }
 
-BOOST_AUTO_TEST_CASE(push_front)
+BOOST_AUTO_TEST_CASE(pushFront)
 {
   madieva::List< int > list;
-  list.push_front(10);
-  list.push_front(20);
-  list.push_front(30);
-  list.push_front(40);
-  BOOST_CHECK(list.size() == 4);
+  list.pushFront(10);
+  list.pushFront(20);
+  list.pushFront(30);
+  list.pushFront(40);
+  BOOST_CHECK(list.getSize() == 4);
 
   auto it = list.begin();
   BOOST_CHECK(*it == 40);
@@ -29,14 +29,14 @@ BOOST_AUTO_TEST_CASE(push_front)
   BOOST_CHECK(*it == 10);
 }
 
-BOOST_AUTO_TEST_CASE(push_back)
+BOOST_AUTO_TEST_CASE(pushBack)
 {
   madieva::List< int > list;
-  list.push_back(10);
-  list.push_back(20);
-  list.push_back(30);
-  list.push_back(40);
-  BOOST_CHECK(list.size() == 4);
+  list.pushBack(10);
+  list.pushBack(20);
+  list.pushBack(30);
+  list.pushBack(40);
+  BOOST_CHECK(list.getSize() == 4);
 
   auto it = list.begin();
   BOOST_CHECK(*it == 10);
@@ -48,60 +48,60 @@ BOOST_AUTO_TEST_CASE(push_back)
   BOOST_CHECK(*it == 40);
 }
 
-BOOST_AUTO_TEST_CASE(pop_front)
+BOOST_AUTO_TEST_CASE(popFront)
 {
   madieva::List<int> list;
-  list.push_back(10);
-  list.push_back(20);
-  list.push_back(30);
+  list.pushBack(10);
+  list.pushBack(20);
+  list.pushBack(30);
 
-  list.pop_front();
-  BOOST_CHECK(list.size() == 2);
+  list.popFront();
+  BOOST_CHECK(list.getSize() == 2);
   auto it = list.begin();
   BOOST_CHECK(*it == 20);
   ++it;
   BOOST_CHECK(*it == 30);
 }
 
-BOOST_AUTO_TEST_CASE(pop_back)
+BOOST_AUTO_TEST_CASE(popBack)
 {
   madieva::List<int> list;
-  list.push_back(10);
-  list.push_back(20);
-  list.push_back(30);
+  list.pushBack(10);
+  list.pushBack(20);
+  list.pushBack(30);
 
-  list.pop_back();
-  BOOST_CHECK(list.size() == 2);
+  list.popBack();
+  BOOST_CHECK(list.getSize() == 2);
   auto it = list.begin();
   BOOST_CHECK(*it == 10);
   ++it;
   BOOST_CHECK(*it == 20);
 }
 
-BOOST_AUTO_TEST_CASE(pop_back_one)
+BOOST_AUTO_TEST_CASE(popBack_one)
 {
   madieva::List<int> list;
-  list.push_back(10);
-  list.pop_back();
-  BOOST_CHECK(list.size() == 0);
+  list.pushBack(10);
+  list.popBack();
+  BOOST_CHECK(list.getSize() == 0);
 }
 
-BOOST_AUTO_TEST_CASE(pop_front_one)
+BOOST_AUTO_TEST_CASE(popFront_one)
 {
   madieva::List<int> list;
-  list.push_front(10);
-  list.pop_front();
-  BOOST_CHECK(list.size() == 0);
+  list.pushFront(10);
+  list.popFront();
+  BOOST_CHECK(list.getSize() == 0);
 }
 
 BOOST_AUTO_TEST_CASE(clear)
 {
   madieva::List<int> list;
-  list.push_back(1);
-  list.push_back(2);
-  list.push_back(3);
+  list.pushBack(1);
+  list.pushBack(2);
+  list.pushBack(3);
   list.clear();
-  BOOST_CHECK(list.size() == 0);
+  BOOST_CHECK(list.getSize() == 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

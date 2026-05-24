@@ -25,9 +25,8 @@ namespace madieva
           return;
         } else if (std::cin.bad()) {
           throw std::ios_base::failure("I/O stream failure");
-        } else if (std::cin.fail()) {
-          std::cin.clear();
         }
+        std::cin.clear();
       }
     }
 
@@ -74,51 +73,50 @@ namespace madieva
       using lim_size_t = std::numeric_limits< size_t >;
       const size_t max_size_t = lim_size_t::max();
       LCIter<List < size_t >> l_it = t_list.begin();
-      for(size_t i = 0; i < t_list.getSize(); ++i) {
+      for(; l_it != t_list.end(); ++l_it) {
         size_t s = 0;
-        LCIter<size_t> n_it = (*l_it).begin();
-        for (size_t j = 0; j < (*l_it).getSize(); ++j) {
+        LCIter<size_t> n_it = l_it->begin();
+        for (; n_it != l_it->end(); ++n_it) {
             if((*n_it) < max_size_t - s) {
-            s += (*n_it);
-            ++n_it;
+            s += *n_it;
           } else {
             throw std::overflow_error("overflow");
           }
         }
         sum.pushBack(s);
-        ++l_it;
       }
     }
 
     void printStrings(const List<std::pair<std::string, List<size_t>>> & list)
     {
       LCIter<std::pair<std::string, List<size_t>>> p_it = list.begin();
-      std::cout << p_it->first;
-      ++p_it;
-      for(size_t i = 1; i < list.getSize(); ++i) {
-        std::cout << " " << p_it->first;
+      if (p_it != list.end()) {
+        std::cout << p_it->first;
         ++p_it;
+        for(; p_it != list.end(); ++p_it) {
+          std::cout << " " << p_it->first;
+        }
       }
       std::cout << "\n";
     }
 
     void printMatrix(const List< List< size_t >> & t_list)
     {
-      if (t_list.getSize() == 0) {
+      if (t_list.isEmpty()) {
         std::cout << "0\n";
         return;
       }
 
       LCIter< List< size_t >> l_it = t_list.begin();
-      for (size_t i = 0; i < t_list.getSize(); ++i) {
-        LCIter< size_t > it_num = (*l_it).begin();
-        std::cout << (*it_num);
-        ++it_num;
-        for(size_t j = 1; j < (*l_it).getSize();++j) {
-          std::cout << " " << (*it_num);
+      for (; l_it != t_list.end(); ++l_it) {
+        LCIter< size_t > it_num = l_it->begin();
+        if (it_num != l_it->end()) {
+          std::cout << *it_num;
           ++it_num;
+          for(; it_num != l_it->end(); ++it_num) {
+            std::cout << " " << *it_num;
+          }
         }
-        ++l_it;
         std::cout << "\n";
       }
     }
@@ -126,11 +124,12 @@ namespace madieva
     void printSums(const List< size_t > & sum)
     {
       LCIter< size_t > s_it = sum.begin();
-      std::cout << (*s_it);
-      ++s_it;
-      for(size_t i = 1; i < sum.getSize(); ++i) {
-        std::cout << " " << (*s_it);
+      if (s_it != sum.end()) {
+        std::cout << (*s_it);
         ++s_it;
+        for(; s_it != sum.end(); ++s_it) {
+          std::cout << " " << (*s_it);
+        }
       }
       std::cout << "\n";
     }
@@ -143,18 +142,17 @@ int main()
   mad::List<std::pair<std::string, mad::List<size_t>>> list;
   try {
     mad::read(list);
-  } catch (const std::overflow_error & e) {
+  } catch (const std::ios_base::failure & e) {
     std::cerr << e.what() << "\n";
-    list.clear();
     return 1;
   }
-  if (list.getSize() == 0) {
+  if (list.isEmpty()) {
     std::cout << "0\n";
     return 0;
   }
   mad::List<mad::List<size_t>> t_list;
   mad::transpose(t_list, list);
-  if (t_list.getSize() == 0) {
+  if (t_list.isEmpty()) {
     mad::printStrings(list);
     std::cout << "0\n";
     return 0;
@@ -166,16 +164,10 @@ int main()
     mad::printStrings(list);
     mad::printMatrix(t_list);
     std::cerr << e.what() << "\n";
-    t_list.clear();
-    list.clear();
-    sum.clear();
     return 1;
   }
   mad::printStrings(list);
   mad::printMatrix(t_list);
   mad::printSums(sum);
-  t_list.clear();
-  list.clear();
-  sum.clear();
   return 0;
 }
