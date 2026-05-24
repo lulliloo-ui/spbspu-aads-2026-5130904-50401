@@ -22,13 +22,13 @@ namespace madieva {
   template< class T >
   void Stack< T >::push(const T & val)
   {
-    data_.push_back(val);
+    data_.pushBack(val);
   }
 
   template< class T >
   void Stack< T >::push(T && val)
   {
-    data_.push_back(std::move(val));
+    data_.pushBack(std::move(val));
   }
 
   template< class T >
@@ -58,13 +58,13 @@ namespace madieva {
   template< class T >
   size_t Stack< T >::size() const noexcept
   {
-    return data_.size();
+    return data_.getSize();
   }
 
   template< class T >
   void Stack< T >::pop() noexcept
   {
-    data_.pop_back();
+    data_.popBack();
   }
 
   template< class T >
@@ -76,7 +76,7 @@ namespace madieva {
   template< class T >
   bool Stack< T >::empty() const noexcept
   {
-    return data_.size() == 0;
+    return data_.getSize() == 0;
   }
 }
 

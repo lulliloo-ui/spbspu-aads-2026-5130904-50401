@@ -21,13 +21,13 @@ namespace madieva {
   template< class T >
   void Queue< T >::push(const T & val)
   {
-    data_.push_back(val);
+    data_.pushBack(val);
   }
 
   template< class T >
   void Queue< T >::push(T && val)
   {
-    data_.push_back(std::move(val));
+    data_.pushBack(std::move(val));
   }
 
   template< class T >
@@ -55,13 +55,13 @@ namespace madieva {
   template< class T >
   size_t Queue< T >::size() const noexcept
   {
-    return data_.size();
+    return data_.getSize();
   }
 
   template< class T >
   void Queue< T >::pop() noexcept
   {
-    data_.pop_front();
+    data_.popFront();
   }
 
   template< class T >
@@ -73,7 +73,7 @@ namespace madieva {
   template< class T >
   bool Queue< T >::empty() const noexcept
   {
-    return data_.size() == 0;
+    return data_.getSize() == 0;
   }
 }
 
