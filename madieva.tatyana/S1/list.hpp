@@ -21,6 +21,8 @@ namespace madieva {
   public:
     LIter<T> & operator++() noexcept;
     LIter<T> & operator--() noexcept;
+    LIter<T> operator++(int) noexcept;
+    LIter<T> operator--(int) noexcept;
     bool operator==(const LIter< T > & a) const noexcept;
     bool operator!=(const LIter< T > & a) const noexcept;
     T & operator*() noexcept;
@@ -36,6 +38,8 @@ namespace madieva {
   public:
     LCIter<T> & operator++() noexcept;
     LCIter<T> & operator--() noexcept;
+    LCIter<T> operator++(int) noexcept;
+    LCIter<T> operator--(int) noexcept;
     bool operator==(const LCIter< T > & a) const noexcept;
     bool operator!=(const LCIter< T > & a) const noexcept;
     const T & operator*() const noexcept;
@@ -64,14 +68,18 @@ namespace madieva {
     bool empty() const noexcept;
     LIter< T > begin() noexcept;
     LCIter< T > begin() const noexcept;
+    LCIter< T > cbegin() const noexcept;
+    LIter< T > end() noexcept;
+    LCIter< T > end() const noexcept;
+    LCIter< T > cend() const noexcept;
   private:
     detail::node_t< T > * head;
     size_t size_;
   };
 
   template< class T >
-  LIter< T >::LIter(detail::node_t< T > * a) noexcept
-    :it(a)
+  LIter< T >::LIter(detail::node_t< T > * a) noexcept :
+    it(a)
   {}
 
   template< class T >
@@ -88,6 +96,24 @@ namespace madieva {
     assert(it);
     it = it->prev;
     return *this;
+  }
+
+  template< class T >
+  LIter<T> LIter< T >::operator++(int) noexcept
+  {
+    assert(it);
+    LIter<T> temp = *this;
+    it = it->next;
+    return temp;
+  }
+
+  template< class T >
+  LIter<T> LIter< T >::operator--(int) noexcept
+  {
+    assert(it);
+    LIter<T> temp = *this;
+    it = it->prev;
+    return temp;
   }
 
   template< class T >
@@ -117,8 +143,8 @@ namespace madieva {
   }
 
   template< class T >
-  LCIter< T >::LCIter(const detail::node_t< T > * a) noexcept
-    : it(a)
+  LCIter< T >::LCIter(const detail::node_t< T > * a) noexcept :
+    it(a)
   {}
 
   template< class T >
@@ -135,6 +161,24 @@ namespace madieva {
     assert(it);
     it = it->prev;
     return *this;
+  }
+
+  template< class T >
+  LCIter<T> LCIter< T >::operator++(int) noexcept
+  {
+    assert(it);
+    LCIter<T> temp = *this;
+    it = it->next;
+    return temp;
+  }
+
+  template< class T >
+  LCIter<T> LCIter< T >::operator--(int) noexcept
+  {
+    assert(it);
+    LCIter<T> temp = *this;
+    it = it->next;
+    return temp;
   }
 
   template< class T >
@@ -164,8 +208,9 @@ namespace madieva {
   }
 
   template< class T >
-  List< T >::List() noexcept
-    : head(nullptr), size_(0)
+  List< T >::List() noexcept :
+    head(nullptr),
+    size_(0)
   {}
 
   template< class T >
@@ -175,7 +220,9 @@ namespace madieva {
   }
 
   template< class T >
-  List< T >::List(const List< T > & a) : head(nullptr), size_(0)
+  List< T >::List(const List< T > & a) :
+    head(nullptr),
+    size_(0)
   {
     detail::node_t< T > * temp = a.head;
     for (size_t i = 0; i < a.size_; ++i) {
@@ -218,13 +265,37 @@ namespace madieva {
   template< class T >
   LIter< T > List< T >::begin() noexcept
   {
-    return LIter< T > (head);
+    return LIter< T >(head);
   }
 
   template< class T >
   LCIter< T > List< T >::begin() const noexcept
   {
-    return LCIter< T > (head);
+    return LCIter< T >(head);
+  }
+
+  template< class T >
+  LCIter< T > List< T >::cbegin() const noexcept
+  {
+    return LCIter< T >(head);
+  }
+
+  template< class T >
+  LIter< T > List< T >::end() noexcept
+  {
+    return LIter< T >(head);
+  }
+
+  template< class T >
+  LCIter< T > List< T >::end() const noexcept
+  {
+    return LCIter< T >(head);
+  }
+
+  template< class T >
+  LCIter< T > List< T >::cend() const noexcept
+  {
+    return LCIter< T >(head);
   }
 
   template< class T >
@@ -253,7 +324,7 @@ namespace madieva {
       head->prev = head;
       size_ = 1;
     } else {
-      detail::node_t< T > * temp = new detail::node_t< T >{a, head, head->prev};
+      detail::node_t< T > * temp = new detail::node_t< T >{std::move(a), head, head->prev};
       head->prev->next = temp;
       head->prev = temp;
       head = temp;
@@ -341,7 +412,6 @@ namespace madieva {
   {
     return !size_;
   }
-
 
 }
 
