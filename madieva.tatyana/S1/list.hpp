@@ -61,14 +61,14 @@ namespace madieva {
     ~List() noexcept;
     List & operator=(const List & a);
     void clear() noexcept;
-    void push_front(const T & a);
-    void push_front(T && a);
-    void push_back(const T & a);
-    void push_back(T && a);
-    void pop_front() noexcept;
-    void pop_back() noexcept;
-    size_t size() const noexcept;
-    bool empty() const noexcept;
+    void pushFront(const T & a);
+    void pushFront(T && a);
+    void pushBack(const T & a);
+    void pushBack(T && a);
+    void popFront() noexcept;
+    void popBack() noexcept;
+    size_t getSize() const noexcept;
+    bool isEmpty() const noexcept;
     LIter< T > begin() noexcept;
     LCIter< T > begin() const noexcept;
     LCIter< T > cbegin() const noexcept;
@@ -248,7 +248,7 @@ namespace madieva {
   {
     for (LCIter< T > it = a.begin(); it != a.end(); ++it) {
       try {
-        this->push_back(*it);
+        this->pushBack(*it);
       } catch (...) {
         this->clear();
         throw;
@@ -318,7 +318,7 @@ namespace madieva {
   }
 
   template< class T >
-  void List< T >::push_front(const T & a)
+  void List< T >::pushFront(const T & a)
   {
     if (!head_) {
       head_ = new detail::node_t< T >{a, nullptr, nullptr};
@@ -335,7 +335,7 @@ namespace madieva {
   }
 
   template< class T >
-  void List< T >::push_front(T && a)
+  void List< T >::pushFront(T && a)
   {
     if (!head_) {
       head_ = new detail::node_t< T >{std::move(a), nullptr, nullptr};
@@ -352,7 +352,7 @@ namespace madieva {
   }
 
   template< class T >
-  void List< T >::push_back(const T & a)
+  void List< T >::pushBack(const T & a)
   {
     if (!head_) {
       head_ = new detail::node_t< T >{a, nullptr, nullptr};
@@ -368,7 +368,7 @@ namespace madieva {
   }
 
   template< class T >
-  void List< T >::push_back(T && a)
+  void List< T >::pushBack(T && a)
   {
     if (!head_) {
       head_ = new detail::node_t< T >{std::move(a), nullptr, nullptr};
@@ -384,7 +384,7 @@ namespace madieva {
   }
 
   template< class T >
-  void List< T >::pop_front() noexcept
+  void List< T >::popFront() noexcept
   {
     if(size_) {
       if(size_ == 1) {
@@ -403,7 +403,7 @@ namespace madieva {
   }
 
   template< class T >
-  void List< T >::pop_back() noexcept
+  void List< T >::popBack() noexcept
   {
     if (size_) {
       if(size_ == 1) {
@@ -421,13 +421,13 @@ namespace madieva {
   }
 
   template< class T >
-  size_t List< T >::size() const noexcept
+  size_t List< T >::getSize() const noexcept
   {
     return size_;
   }
 
   template< class T >
-  bool List< T >::empty() const noexcept
+  bool List< T >::isEmpty() const noexcept
   {
     return !size_;
   }
