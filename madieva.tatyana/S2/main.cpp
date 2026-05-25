@@ -31,7 +31,6 @@ namespace madieva
     void postfix(std::string line, madieva::Queue< std::string > & post)
     {
       madieva::Stack< std::string > op;
-      char s;
       for (size_t i = 0; i < line.length(); ++i) {
         if (line[i] == ' ') {
           continue;

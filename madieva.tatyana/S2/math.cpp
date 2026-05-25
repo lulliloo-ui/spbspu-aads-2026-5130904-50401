@@ -88,7 +88,7 @@ namespace madieva
         temp.pop();
         const long long left = temp.top();
         temp.pop();
-        temp.push(calculateOperation(token, temp));
+        temp.push(calculateOperation(token, left, right));
       } else {
         temp.push(std::stoll(token));
       }

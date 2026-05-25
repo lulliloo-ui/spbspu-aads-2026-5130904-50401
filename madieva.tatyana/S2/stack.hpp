@@ -35,7 +35,7 @@ namespace madieva {
   T & Stack< T >::top()
   {
     if (!empty()) {
-      LIter< T > it = data_.begin();
+      LIter< T > it = data_.end();
       --it;
       return (*it);
     } else {
@@ -47,7 +47,7 @@ namespace madieva {
   const T & Stack< T >::top() const
   {
     if (!empty()) {
-      LCIter< T > it = data_.begin();
+      LCIter< T > it = data_.end();
       --it;
       return (*it);
     } else {
