@@ -3,7 +3,7 @@
 namespace madieva
 {
 
-  bool isOperator(const std::string& token)
+  bool isOperator(const std::string & token)
   {
     return token == "+" ||
       token == "-" ||
@@ -26,15 +26,8 @@ namespace madieva
     return a;
   }
 
-  long long calculateOperation(const std::string & op, madieva::Stack< long long > & temp)
+  long long calculateOperation(const std::string & op, long long left, long long right)
   {
-    if (temp.size() < 2) {
-      throw std::runtime_error("Invalid expression");
-    }
-    const long long right = temp.top();
-    temp.pop();
-    const long long left = temp.top();
-    temp.pop();
     if (op == "+") {
       if ((right > 0 && left > MAX - right) ||
         (right < 0 && left < MIN - right)) {
@@ -88,6 +81,13 @@ namespace madieva
     while (!post.empty()) {
       const std::string token = post.front();
       if (isOperator(token)) {
+        if (temp.size() < 2) {
+          throw std::runtime_error("Invalid expression");
+        }
+        const long long right = temp.top();
+        temp.pop();
+        const long long left = temp.top();
+        temp.pop();
         temp.push(calculateOperation(token, temp));
       } else {
         temp.push(std::stoll(token));

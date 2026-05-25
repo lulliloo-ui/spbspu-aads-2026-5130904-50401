@@ -1,4 +1,6 @@
 #include <fstream>
+#include <iostream>
+#include <string>
 #include "stack.hpp"
 #include "queue.hpp"
 #include "math.hpp"
@@ -7,84 +9,59 @@ namespace madieva
 {
   namespace
   {
-    int getPriority(char op)
+    int getPriority(const std::string & op)
     {
-      if (op == '+' || op == '-') return 1;
-      if (op == '*' || op == '/' || op == '%' || op == 'g') return 2;
+      if (op == "+" || op == "-") return 1;
+      if (op == "*" || op == "/" || op == "%" || op == "gcd") return 2;
       return 0;
     }
 
-    void handleOperator(char s, madieva::Stack< std::string > & op, madieva::Queue< std::string > & post)
+    void handleOperator(const std::string & s, madieva::Stack< std::string > & op,
+      madieva::Queue< std::string > & post)
     {
       int prior = getPriority(s);
 
-      while (!op.empty() && op.top() != "(" && getPriority(op.top()[0]) >= prior) {
+      while (!op.empty() && op.top() != "(" && getPriority(op.top()) >= prior) {
           post.push(op.top());
           op.pop();
       }
-
-      op.push(std::string(1, s));
+      op.push(s);
     }
 
     void postfix(std::string line, madieva::Queue< std::string > & post)
     {
       madieva::Stack< std::string > op;
-      std::string number;
-      std::string op_gcd;
       char s;
       for (size_t i = 0; i < line.length(); ++i) {
-        s = line[i];
-        if (s != ' ') {
-          if (s == '(') {
-            op.push(std::string(1, s));
-          } else if (s == '*' || s == '/' || s == '%' || s == '+' || s == '-') {
-            handleOperator(s, op, post);
-          } else if (s == ')') {
+        if (line[i] == ' ') {
+          continue;
+        }
+
+        size_t start = i;
+        while (i < line.length() && line[i] != ' ') {
+          ++i;
+        }
+        const std::string token = line.substr(start, i - start);
+        if (token == "(") {
+          op.push(token);
+        } else if (token == ")") {
+          if (op.empty()) {
+            throw std::runtime_error("Mismatched parentheses");
+          }
+          std::string temp = op.top();
+          while (temp != "(") {
+            post.push(temp);
+            op.pop();
             if (op.empty()) {
               throw std::runtime_error("Mismatched parentheses");
             }
-            std::string temp = op.top();
-            while (temp != "(") {
-              post.push(temp);
-              op.pop();
-              if (op.empty()) {
-                throw std::runtime_error("Mismatched parentheses");
-              }
-              temp = op.top();
-            }
-            op.pop();
-          } else {
-            if (std::isdigit(s)) {
-              number += s;
-            } else {
-              op_gcd += s;
-            }
+            temp = op.top();
           }
+          op.pop();
+        } else if (isOperator(token)) {
+          handleOperator(token, op, post);
         } else {
-          if (number.length()) {
-            post.push(number);
-            number.clear();
-          } else if (op_gcd.length()) {
-            if (op_gcd != "gcd") {
-              throw std::runtime_error("Unknown token");
-            } else {
-              char gcd = 'g';
-              handleOperator(gcd, op, post);
-              op_gcd.clear();
-            }
-          }
-        }
-      }
-      if (number.length()) {
-        post.push(number);
-        number.clear();
-      } else if (op_gcd.length()) {
-        if (op_gcd != "gcd") {
-          throw std::runtime_error("Unknown token");
-        } else {
-          char gcd = 'g';
-          handleOperator(gcd, op, post);
-          op_gcd.clear();
+          post.push(token);
         }
       }
       while (!op.empty()) {
@@ -92,33 +69,21 @@ namespace madieva
         op.pop();
       }
     }
+  }
+}
 
-    void print(madieva::Stack< long long > & res)
-{
-  if (!res.empty()) {
-    std::cout << res.top();
-    res.pop();
-  }
-  while (!res.empty()) {
-    std::cout << " " << res.top();
-    res.pop();
-  }
-  std::cout << "\n";
-}
-  }
-}
 int main(int argc, char * argv[])
 {
   namespace mad = madieva;
   std::ifstream file;
-  std::istream * in = & std::cin;
+  std::istream * in = &std::cin;
   if (argc == 2) {
     file.open(argv[1]);
     if (!file.is_open()) {
-      std::cerr << "file not opeen\n";
+      std::cerr << "file not open\n";
       return 1;
     }
-    in = & file;
+    in = &file;
   } else if (argc > 2) {
     std::cerr  << "Not right size arguments\n";
     return 2;
@@ -126,13 +91,7 @@ int main(int argc, char * argv[])
   mad::Stack< long long > res;
   std::string line;
   while (std::getline(*in, line)) {
-    bool empty = true;
-    for (size_t i = 0; empty && i < line.size(); ++i) {
-      if (line[i] != ' ' && line[i] != '\n') {
-        empty = false;
-      }
-    }
-    if (!empty) {
+    if (!line.empty()) {
       try {
         mad::Queue< std::string > post;
         mad::postfix(line, post);
@@ -143,5 +102,13 @@ int main(int argc, char * argv[])
       }
     }
   }
-  mad::print(res);
+  if (!res.empty()) {
+    std::cout << res.top();
+    res.pop();
+  }
+  while (!res.empty()) {
+    std::cout << " " << res.top();
+    res.pop();
+  }
+  std::cout << "\n";
 }
